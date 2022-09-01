@@ -3,10 +3,13 @@
 
 void Main::Init()
 {
-	map = new ObIso();
-	map->scale = Vector2(100.0f, 100.0f);
-	map->SetWorldPos(Vector2(-app.GetHalfWidth(), -app.GetHalfHeight()));
-	map->file = "map2.txt";
+
+	//Âï±â Àü¿¡ ÆÄÀÏ ÀÌ¸§ È®ÀÎ Çß´ÂÁö~!!!
+
+	map = new ObTileMap();
+	map->scale = Vector2(26.0f, 26.0f) * 2.0f;
+	map->SetWorldPos(Vector2(0.0f, 0.0f));
+	map->file = "map1.txt";
 	map->Load();
 	LIGHT->light.radius = 3000.0f;
 
@@ -24,19 +27,19 @@ void Main::Release()
 
 void Main::Update()
 {
-	if (INPUT->KeyPress(VK_LEFT))
+	if (INPUT->KeyPress('A'))
 	{
 		CAM->position.x -= 100.0f * DELTA;
 	}
-	if (INPUT->KeyPress(VK_RIGHT))
+	if (INPUT->KeyPress('D'))
 	{
 		CAM->position.x += 100.0f * DELTA;
 	}
-	if (INPUT->KeyPress(VK_UP))
+	if (INPUT->KeyPress('W'))
 	{
 		CAM->position.y += 100.0f * DELTA;
 	}
-	if (INPUT->KeyPress(VK_DOWN))
+	if (INPUT->KeyPress('S'))
 	{
 		CAM->position.y -= 100.0f * DELTA;
 	}
@@ -146,8 +149,8 @@ void Main::LateUpdate()
 void Main::Render()
 {
 	//                               L  T   R   B
-	DWRITE->RenderText(L"¾È³ç\n¾È³ç", RECT{ 300,100,(long)app.GetWidth(),(long)app.GetHalfHeight() },
-		30.0f, L"ÈŞ¸Õ¸ÅÁ÷Ã¼", Color(1, 0, 0, 1), DWRITE_FONT_WEIGHT_BOLD);
+	/*DWRITE->RenderText(L"¾È³ç\n¾È³ç", RECT{ 300,100,(long)app.GetWidth(),(long)app.GetHalfHeight() },
+		30.0f, L"ÈŞ¸Õ¸ÅÁ÷Ã¼", Color(1, 0, 0, 1), DWRITE_FONT_WEIGHT_BOLD);*/
 
 	map->Render();
 }

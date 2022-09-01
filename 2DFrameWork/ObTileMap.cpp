@@ -13,12 +13,12 @@ ObTileMap::ObTileMap()
     file = "map1.txt";
     scale = Vector2(50.0f, 50.0f);
 
-    tileImages[0] = new ObImage(L"Tile.png");
-    tileImages[0]->maxFrame = Int2(8, 6);
-    tileImages[1] = new ObImage(L"Tile2.png");
-    tileImages[1]->maxFrame = Int2(11, 7);
-    tileImages[2] = new ObImage(L"bono3.png");
-    tileImages[2]->maxFrame = Int2(1, 1);
+    tileImages[0] = new ObImage(L"TileDirt.png");
+    tileImages[0]->maxFrame = Int2(21, 17);
+    tileImages[1] = new ObImage(L"TileStone.png");
+    tileImages[1]->maxFrame = Int2(21, 26);
+    tileImages[2] = new ObImage(L"Tile.png");
+    tileImages[2]->maxFrame = Int2(21, 17);
     tileImages[3] = nullptr;
 
     ResizeTile(tileSize);

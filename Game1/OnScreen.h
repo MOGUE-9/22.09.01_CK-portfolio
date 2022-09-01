@@ -9,10 +9,24 @@ enum class ItemType
 
 class OnScreen
 {
+protected:
+
+	ItemType itemType;
+
+private:
 	ObImage* bag;
 	ObImage* hand;
 
-	ItemType itemType;
+	ObImage* eat;
+	ObImage* stand;
+
+
+
+	void Weapon();
+	void Food();
+	void Tool();
+	void None();
+
 
 public:
 	OnScreen();

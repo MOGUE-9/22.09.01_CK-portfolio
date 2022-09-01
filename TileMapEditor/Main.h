@@ -3,8 +3,8 @@
 class Main : public Scene
 {
 private:
-	//ObTileMap* map;
-	ObIso* map;
+	ObTileMap* map;
+	//ObIso* map;
 	Int2		pickingIdx;
 	int			imgIdx;
 	Int2		mouseIdx;
