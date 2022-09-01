@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="Main.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Scene01.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Chara</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>Chara</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>Chara</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadingScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon.h">
+      <Filter>Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="PickAxe.h">
+      <Filter>Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Bag.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Sword.h">
+      <Filter>Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="OnScreen.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="HotBar.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Scene01.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Chara</Filter>
+    </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>Chara</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>Chara</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadingScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon.cpp">
+      <Filter>Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="PickAxe.cpp">
+      <Filter>Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Bag.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Sword.cpp">
+      <Filter>Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="OnScreen.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="HotBar.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{e430be2a-5f1c-4ff5-9873-590bc0d16f25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Weapon">
+      <UniqueIdentifier>{d44917a2-1f6c-4dac-a18d-d8c2dd089d64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Chara">
+      <UniqueIdentifier>{3bb453d1-d0e4-4df2-ad9a-9b15531592c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{ea477b01-6fec-42d1-8a18-501199490c34}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
