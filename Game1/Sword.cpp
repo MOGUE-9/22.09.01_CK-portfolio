@@ -50,6 +50,7 @@ void Sword::Render()
 void Sword::Idle()
 {
 	col->scale = Vector2(10.0f, 20.0f) * 1.5f;
+	//sword->rotationY = 0.0f;
 
 	if (INPUT->KeyPress(VK_LBUTTON))
 	{
@@ -67,6 +68,7 @@ void Sword::Attack()
 
 	if (mDirState == mDir_L)
 	{
+		//sword->rotationY = 180.0f;
 		sword->reverseLR = true;
 		dir.x = -8.0f;
 	}
@@ -79,10 +81,11 @@ void Sword::Attack()
 	{
 		sword->reverseLR = true;
 		dir.x = 8.0f;
-		dir.y = 10.0f;
+		dir.y = 15.0f;
 	}
 	else
 	{
+		//sword->rotationY = 0.0f;
 		sword->reverseLR = false;
 		dir.x = 8.0f;
 	}

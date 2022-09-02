@@ -33,7 +33,7 @@ public:
 
 	//member
 private:
-	Matrix		S, R, T, R2, RT, Pi, WVP;
+	Matrix		S, R, Y, T, R2, RT, Pi, WVP;
 	Matrix*		P;
 	Vector2		position;
 
@@ -44,6 +44,7 @@ public:
 	Vector2		pivot;
 	Vector2		scale;
 	float		rotation;
+	float		rotationY;
 	float		rotation2;
 	bool		axis;
 	bool        visible;

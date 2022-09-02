@@ -5,6 +5,8 @@ Scene01::Scene01()
     LIGHT->light.radius = 2000.0f;
     pl = new Player();
 
+    weapon = new Weapon();
+   
     pickAxe = new PickAxe();
     sword = new Sword();
     torch = new Torch();
@@ -17,7 +19,7 @@ Scene01::Scene01()
     //map->file = "map1.txt";
     //map->Load();
     //map->CreateTileCost();
-
+    //
     //m.lock();
     //Sleep(1000);
     //loadingCount++;
@@ -38,7 +40,7 @@ Scene01::Scene01()
     //Sleep(1000);
     //loadingCount++;
     //m.unlock();
-
+    //
     /*m.lock();
     Sleep(1000);
     loadingCount++;
@@ -83,6 +85,8 @@ void Scene01::Update()
 
     pickAxe->SetTarget(pl->GetPos());
     sword->SetTarget(pl->GetPos());
+
+
 
 
     //우클릭햇을때
@@ -184,12 +188,25 @@ void Scene01::Render()
     //    30.0f, L"휴먼매직체", Color(1, 0, 0, 1), DWRITE_FONT_WEIGHT_BOLD);
     //map->Render();
 
-    pl->Render();
+    
+    if (sword->GetWeaponDir() == 2)
+    {
+        //pickAxe->Render();
+        sword->Render();
+        torch->Render();
+        pl->Render();
+    }
+    else
+    {
+        pl->Render();
+        //pickAxe->Render();
+        sword->Render();
+        torch->Render();
+    }
+
     //mon->Render();
 
-    //pickAxe->Render();
-    sword->Render();
-    torch->Render();
+
 
     bags->Render();
     screenUI->Render();

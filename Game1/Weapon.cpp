@@ -23,3 +23,8 @@ void Weapon::SetWeaponPos(Vector2 target)
 		mDirState = mDir_L;
 	}
 }
+
+int Weapon::GetWeaponDir()
+{
+	return mDirState;
+}

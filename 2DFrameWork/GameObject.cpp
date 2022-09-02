@@ -81,11 +81,13 @@ void GameObject::Update()
 {
 	Pi = Matrix::CreateTranslation(pivot.x, pivot.y, 0.0f);
 	S = Matrix::CreateScale(scale.x, scale.y, 1.0f);
+
+	Y = Matrix::CreateRotationY(rotationY);
 	R = Matrix::CreateRotationZ(rotation);
 	T = Matrix::CreateTranslation(position.x, position.y, 0.0f);
 	R2 = Matrix::CreateRotationZ(rotation2);
 
-	RT = R * T * R2;
+	RT = Y * R * T * R2;
 
 	//P의 주소가 있으면
 	if (P)

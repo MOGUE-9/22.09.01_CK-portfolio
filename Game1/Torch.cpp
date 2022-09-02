@@ -3,7 +3,7 @@
 Torch::Torch()
 {
 	col = new ObRect();
-	col->scale = Vector2(32.0f, 32.0f) * 2.0f;
+	col->scale = Vector2(10.0f, 32.0f) * 2.0f;
 	col->SetWorldPos(Vector2(100.0f, 100.0f));
 	col->isFilled = false;
 
@@ -22,7 +22,17 @@ Torch::~Torch()
 
 void Torch::Update()
 {
+	if (col->Intersect(INPUT->GetMouseWorldPos()))
+	{
+		if (INPUT->KeyPress(VK_LBUTTON))
+		{
+			col->SetWorldPos(INPUT->GetMouseWorldPos());
+		}
+		else
+		{
 
+		}
+	}
 
 	col->Update();
 	torch->Update();
@@ -33,4 +43,9 @@ void Torch::Render()
 
 	col->Render();
 	torch->Render();
+}
+
+void Torch::isInterSect()
+{
+	isInterSec = true;
 }

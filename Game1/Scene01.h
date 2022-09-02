@@ -5,7 +5,8 @@ class Scene01 : public Scene
 private:
 	Player* pl;
 	//Monster* mon;
-
+	
+	Weapon*		weapon;
 	PickAxe*	pickAxe;
 	Sword*		sword;
 	Torch*		torch;
