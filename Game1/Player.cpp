@@ -5,16 +5,16 @@ Player::Player()
 	col = new ObRect();
 	//col->SetWorldPos(Vector2(-500.0f, -200.0f));
 	col->SetWorldPos(Vector2());
-	col->scale = Vector2(26.0f, 36.0f) * 3.0f;
+	col->scale = Vector2(26.0f, 36.0f);
 	col->isFilled = false;
 
 	walk = new ObImage(L"IdleWalk.png");
-	walk->scale = Vector2(46.0f, 46.0f) * 3.0f;
+	walk->scale = Vector2(46.0f, 46.0f);
 	walk->maxFrame = Int2(7, 6);
 	walk->SetParentRT(*col);
 
 	action = new ObImage(L"Action.png");
-	action->scale = Vector2(46.0f, 46.0f) * 3.0f;
+	action->scale = Vector2(46.0f, 46.0f);
 	action->maxFrame = Int2(4, 6);
 	action->SetParentRT(*col);
 	action->visible = false;

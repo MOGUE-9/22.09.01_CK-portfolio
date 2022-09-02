@@ -24,7 +24,6 @@ OnScreen::OnScreen()
 	stand->visible = false;
 	stand->space = SPACE::SCREEN; //화면고정 UI (카메라고정)
 
-
 	itemType = ItemType::NONE;
 }
 
@@ -37,7 +36,7 @@ OnScreen::~OnScreen()
 
 void OnScreen::Update()
 {
-	//아이콘 변경 확인용 커맨드
+	////아이콘 변경 확인용 커맨드
 	//if (INPUT->KeyPress('1'))
 	//{
 	//	itemType = ItemType::WEAPON;

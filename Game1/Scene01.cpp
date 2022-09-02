@@ -7,7 +7,9 @@ Scene01::Scene01()
 
     pickAxe = new PickAxe();
     sword = new Sword();
+    torch = new Torch();
 
+    bags = new Bag();
     screenUI = new OnScreen();
 
     //mon = new Monster();
@@ -138,13 +140,15 @@ void Scene01::Update()
 
     pickAxe->Update();
     sword->Update();
+    torch->Update();
 
+    bags->Update();
     screenUI->Update();
 
     //mon->SetTarget(pl->GetPos());
     //mon->Update();
     //map->Update();
-    //CAM->position = pl->GetPos();
+    CAM->position = pl->GetPos();
 }
 
 void Scene01::LateUpdate()
@@ -185,9 +189,9 @@ void Scene01::Render()
 
     //pickAxe->Render();
     sword->Render();
+    torch->Render();
 
-
-
+    bags->Render();
     screenUI->Render();
 
 }

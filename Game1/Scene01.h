@@ -8,7 +8,9 @@ private:
 
 	PickAxe*	pickAxe;
 	Sword*		sword;
+	Torch*		torch;
 
+	Bag* bags;
 	OnScreen* screenUI;
 
 	ObTileMap* map;

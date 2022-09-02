@@ -10,7 +10,6 @@ enum class ItemType
 class OnScreen
 {
 protected:
-
 	ItemType itemType;
 
 private:

@@ -16,6 +16,8 @@ protected:
 	ObRect* col;
 	Vector2 target;
 
+	int mDirState;
+
 public:
 					// 마우스 위치 받아오기
 	void SetWeaponPos(Vector2 target);
