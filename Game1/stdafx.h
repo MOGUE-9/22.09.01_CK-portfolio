@@ -13,7 +13,7 @@
 #include "Torch.h"
 
 #include "OnScreen.h"
-#include "HotBar.h"
+#include "Icon.h"
 #include "Bag.h"
 
 

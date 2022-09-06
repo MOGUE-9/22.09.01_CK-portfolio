@@ -12,13 +12,22 @@ Torch::Torch()
 	torch->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
 	torch->scale = Vector2(32.0f, 32.0f) * 2.0f;
 	torch->SetParentRT(*col);
+	torch->visible = true;
+
+	torchIcon = new ObImage(L"iconTorchS.png");
+	torchIcon->scale = Vector2(16.0f, 16.0f) * 2.0f;
+	torchIcon->SetParentRT(*col);           
+	torchIcon->visible = false;
+
+
+	torchState = TorchState::STAND;
 }
 
 Torch::~Torch()
 {
 	SafeDelete(col);
 	SafeDelete(torch);
-}
+}	
 
 void Torch::Update()
 {
@@ -28,14 +37,28 @@ void Torch::Update()
 		{
 			col->SetWorldPos(INPUT->GetMouseWorldPos());
 		}
-		else
-		{
-
-		}
 	}
+
+	cout << a << endl;
+
+	switch (torchState)
+	{
+	case TorchState::STAND:
+		Stand();
+		break;
+	case TorchState::MINI:
+		Mini();
+		break;
+	case TorchState::NONE:
+		None();
+		break;
+	}
+
 
 	col->Update();
 	torch->Update();
+	torchIcon->Update();
+
 }
 
 void Torch::Render()
@@ -43,9 +66,53 @@ void Torch::Render()
 
 	col->Render();
 	torch->Render();
+	torchIcon->Render();
 }
 
-void Torch::isInterSect()
+void Torch::Stand()
 {
-	isInterSec = true;
+	a = 0;
+	if (count == 0)
+	{
+		torchState = TorchState::MINI;
+		torch->visible = false;
+		torchIcon->visible = true;
+	}
+}
+
+void Torch::Mini()
+{
+	a = 1;
+
+	Vector2 moveDir = playerPivot - col->GetWorldPos();
+
+	col->MoveWorldPos(moveDir * 10.0f * DELTA);
+
+	if (col->GetWorldPos() == playerPivot)
+	{
+		torchState = TorchState::NONE;
+	}
+}
+
+void Torch::None()
+{
+	a = 2;
+
+	torchIcon->visible = false;
+}
+
+bool Torch::isInterSect(ObRect* col)
+{
+	if (this->col->Intersect(col))
+	{
+		return true;
+	}
+	else false;
+
+	//isInterSec = true;
+}
+
+void Torch::GetPlayer(Vector2 pos)
+{
+	playerPivot = pos;
 }

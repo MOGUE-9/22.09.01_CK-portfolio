@@ -6,13 +6,22 @@ Scene01::Scene01()
     pl = new Player();
 
     weapon = new Weapon();
-   
+    
     pickAxe = new PickAxe();
     sword = new Sword();
     torch = new Torch();
 
     bags = new Bag();
     screenUI = new OnScreen();
+
+    for (int y = 0; y < bagY; y++)
+    {
+        for (int x = 0; x < bagX; x++)
+        {
+            icons[x][y] = new Icon();
+        }
+    }
+
 
     //mon = new Monster();
     //map = new ObTileMap();
@@ -41,6 +50,7 @@ Scene01::Scene01()
     //loadingCount++;
     //m.unlock();
     //
+
     /*m.lock();
     Sleep(1000);
     loadingCount++;
@@ -83,11 +93,31 @@ void Scene01::Update()
 {
     //ImGui::SliderFloat2("Scale", (float*)&map->scale, 0.0f, 100.0f);
 
+    if (INPUT->KeyDown(VK_TAB))
+    {
+        isOpenBag = !isOpenBag;
+    }
+
     pickAxe->SetTarget(pl->GetPos());
     sword->SetTarget(pl->GetPos());
 
-
-
+    if (!isOpenBag)
+    {
+        for (int x = 0; x < bagX; x++)
+        {
+            icons[x][0]->SetIconPos(bags->GetHotbarPos(x));
+        }
+    }
+    else
+    {
+        for (int y = 0; y < bagY; y++)
+        {
+            for (int x = 0; x < bagX; x++)
+            {
+                icons[x][y]->SetIconPos(bags->GetBagitemPos(x, y));
+            }
+        }
+    }
 
     //¿ìÅ¬¸¯ÇÞÀ»¶§
     //if (INPUT->KeyDown(VK_RBUTTON))
@@ -149,6 +179,14 @@ void Scene01::Update()
     bags->Update();
     screenUI->Update();
 
+    for (int y = 0; y < bagY; y++)
+    {
+        for (int x = 0; x < bagX; x++)
+        {
+            icons[x][y]->Update();
+        }
+    }
+
     //mon->SetTarget(pl->GetPos());
     //mon->Update();
     //map->Update();
@@ -157,6 +195,23 @@ void Scene01::Update()
 
 void Scene01::LateUpdate()
 {
+    //INPUT->GetMouseWorldPos()
+
+    //if (torch->isInterSect(sword->ReturnHitBox()))
+    //{
+    //    cout << "ÀÌ°ÅµÊ?" << endl; //µÊ!!!!
+    //}
+
+    if (sword->ReturnHitBox()->Intersect(torch->ReturnCol()))
+    {
+        cout << "ÀÌ°ÇµÅ?" << endl;  //µÊ!!!!
+        sword->attackCoolTime();
+        torch->GetPlayer(pl->GetPos());
+        
+        torch->count--;
+    }
+
+
     //Int2 on;
     //
     //if (map->WorldPosToTileIdx(pl->GetPos(), on))
@@ -211,6 +266,33 @@ void Scene01::Render()
     bags->Render();
     screenUI->Render();
 
+
+    if (!isOpenBag)
+    {
+        for (int x = 0; x < bagX; x++)
+        {
+            icons[x][0]->Render();
+        }
+    }
+    else
+    {
+        for (int y = 0; y < bagY; y++)
+        {
+            for (int x = 0; x < bagX; x++)
+            {
+                icons[x][y]->Render();
+            }
+        }
+    }
+
+
+    //for (int y = 0; y < bagY; y++)
+    //{
+    //    for (int x = 0; x < bagX; x++)
+    //    {
+    //        icons[x][y]->Render();
+    //    }
+    //}
 }
 
 void Scene01::ResizeScreen()

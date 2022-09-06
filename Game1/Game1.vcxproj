@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HotBar.h" />
+    <ClInclude Include="Icon.h" />
     <ClInclude Include="OnScreen.h" />
     <ClInclude Include="PickAxe.h" />
     <ClInclude Include="Bag.h" />
@@ -35,7 +35,7 @@
     <ClInclude Include="Weapon.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="HotBar.cpp" />
+    <ClCompile Include="Icon.cpp" />
     <ClCompile Include="OnScreen.cpp" />
     <ClCompile Include="PickAxe.cpp" />
     <ClCompile Include="Bag.cpp" />

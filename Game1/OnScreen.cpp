@@ -36,23 +36,23 @@ OnScreen::~OnScreen()
 
 void OnScreen::Update()
 {
-	////아이콘 변경 확인용 커맨드
-	//if (INPUT->KeyPress('1'))
-	//{
-	//	itemType = ItemType::WEAPON;
-	//}
-	//if (INPUT->KeyPress('2'))
-	//{
-	//	itemType = ItemType::TOOL;
-	//}
-	//if (INPUT->KeyPress('3'))
-	//{
-	//	itemType = ItemType::FOOD;
-	//}
-	//if (INPUT->KeyPress('4'))
-	//{
-	//	itemType = ItemType::NONE;
-	//}
+	//아이콘 변경 확인용 커맨드
+	if (INPUT->KeyPress('1'))
+	{
+		itemType = ItemType::WEAPON;
+	}
+	if (INPUT->KeyPress('2'))
+	{
+		itemType = ItemType::TOOL;
+	}
+	if (INPUT->KeyPress('3'))
+	{
+		itemType = ItemType::FOOD;
+	}
+	if (INPUT->KeyPress('4'))
+	{
+		itemType = ItemType::NONE;
+	}
 
 	switch (itemType)
 	{
@@ -61,6 +61,12 @@ void OnScreen::Update()
 		break;
 	case ItemType::TOOL:
 		Tool();
+		break;
+	case ItemType::TORCH:
+		Tool();
+		break;
+	case ItemType::WOOD:
+		None();
 		break;
 	case ItemType::FOOD:
 		Food();

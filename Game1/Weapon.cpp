@@ -28,3 +28,18 @@ int Weapon::GetWeaponDir()
 {
 	return mDirState;
 }
+
+void Weapon::attackCoolTime()
+{
+	hitBox->colOnOff = false;
+}
+
+ObRect* Weapon::ReturnCol()
+{
+	return col;
+}
+
+ObRect* Weapon::ReturnHitBox()
+{
+	return hitBox;
+}

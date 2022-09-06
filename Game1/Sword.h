@@ -8,9 +8,11 @@ enum class SwordState
 
 class Sword : public Weapon
 {
-	ObImage* sword;
+	ObImage*	sword;
 
-	SwordState swordState;
+	SwordState	swordState;
+
+	float		attackTime;
 		
 public:
 	void Idle();
@@ -23,6 +25,8 @@ public:
 
 	void Update();
 	void Render();
+
+	
 
 };
 

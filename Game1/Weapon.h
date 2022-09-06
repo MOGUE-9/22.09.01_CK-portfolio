@@ -16,7 +16,12 @@ protected:
 	ObRect* col;
 	Vector2 target;
 
-	int mDirState;
+	ObRect* hitBox;
+
+	int		mDirState;
+
+	float	attackTime;
+
 
 public:
 					// 마우스 위치 받아오기
@@ -35,6 +40,14 @@ public:
 	{
 		col->SetWorldPos(pos);
 	}
+
+
+	void attackCoolTime();
+
+	ObRect* ReturnCol();
+
+
+	ObRect* ReturnHitBox();
 
 };
 

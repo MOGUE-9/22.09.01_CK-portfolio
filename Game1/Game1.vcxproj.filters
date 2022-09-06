@@ -33,7 +33,7 @@
     <ClInclude Include="OnScreen.h">
       <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="HotBar.h">
+    <ClInclude Include="Icon.h">
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="Torch.h">
@@ -72,7 +72,7 @@
     <ClCompile Include="OnScreen.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="HotBar.cpp">
+    <ClCompile Include="Icon.cpp">
       <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="Torch.cpp">

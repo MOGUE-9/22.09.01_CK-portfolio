@@ -25,6 +25,10 @@ public:
 	void Update();
 	void Render();
 
+	Vector2 GetHotbarPos(int x);
+
+	Vector2 GetBagitemPos(int x, int y);
+
 	void AddItem();
 	void CheckItem();
 

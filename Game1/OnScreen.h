@@ -3,6 +3,8 @@ enum class ItemType
 {
 	WEAPON,
 	TOOL,
+	TORCH,
+	WOOD,
 	FOOD,
 	NONE
 };

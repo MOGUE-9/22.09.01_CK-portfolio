@@ -4,8 +4,17 @@ Sword::Sword()
 {
 	col = new ObRect();
 	col->scale = Vector2(10.0f, 20.0f) *1.5f;
-	col->color = Color(1.0f, 0.0f, 0.0f, 1.0f);
+	col->color = Color(0.0f, 0.0f, 1.0f, 1.0f);
+	col->colOnOff = false;
 	col->isFilled = false;
+
+	hitBox = new ObRect();
+	hitBox->colOnOff = false;
+	hitBox->pivot = OFFSET_L;
+	hitBox->scale = Vector2(15.0f, 20.0f) * 1.5f;
+	hitBox->color = Color(1.0f, 0.0f, 0.0f, 1.0f);
+	hitBox->SetParentRT(*col);
+	hitBox->isFilled = false;
 
 	sword = new ObImage(L"Sword.png");
 	sword->scale = Vector2(40.0f, 40.0f) * 1.5f;
@@ -28,6 +37,11 @@ void Sword::Update()
 
 	SetWeaponPos(INPUT->GetMouseWorldPos());
 
+
+
+
+
+
 	switch (swordState)
 	{
 	case SwordState::IDLE:
@@ -37,15 +51,19 @@ void Sword::Update()
 		Attack();
 		break;
 	}
+
 	col->Update();
+	hitBox->Update();
 	sword->Update();
 }
 
 void Sword::Render()
 {
 	col->Render();
+	hitBox->Render();
 	sword->Render();
 }
+
 
 void Sword::Idle()
 {
@@ -57,46 +75,84 @@ void Sword::Idle()
 		swordState = SwordState::ATTACK;
 		float time = 4.0f / 70.0f;
 		sword->ChangeAnim(ANIMSTATE::LOOP, time);
+		attackTime = 0.0f;
+		hitBox->colOnOff = true;
 	}
 }
 
 void Sword::Attack()
 {
 	Vector2 dir = Vector2(0.0f, 0.0f);
+	attackTime += DELTA;
 
-	cout << mDirState << endl;
+	//cout << mDirState << endl;
 
 	if (mDirState == mDir_L)
 	{
 		//sword->rotationY = 180.0f;
 		sword->reverseLR = true;
 		dir.x = -8.0f;
+
+		hitBox->rotationY = PI;
+		hitBox->SetLocalPos(Vector2(0.0f, 0.0f));
+		hitBox->scale.x = 15.0f * 1.5f;
 	}
 	else if (mDirState == mDir_B)
 	{
 		sword->reverseLR = false;
 		dir.x = -8.0f;
+
+		hitBox->rotationY = 0.0f;
+		hitBox->SetLocalPos(Vector2(-7.5f, -20.0f));
+		hitBox->scale.x = 20.0f * 1.5f;
 	}
 	else if (mDirState == mDir_T)
 	{
 		sword->reverseLR = true;
 		dir.x = 8.0f;
 		dir.y = 15.0f;
+
+		hitBox->rotationY = PI;
+		hitBox->SetLocalPos(Vector2(7.5f, 0.0f));
+		hitBox->scale.x = 20.0f * 1.5f;
 	}
-	else
+	else if(mDirState == mDir_R)
 	{
 		//sword->rotationY = 0.0f;
 		sword->reverseLR = false;
 		dir.x = 8.0f;
+
+		hitBox->rotationY = 0.0f;
+		hitBox->SetLocalPos(Vector2(0.0f, 0.0f));
+		hitBox->scale.x = 15.0f * 1.5f;
 	}
 
 	Vector2 pos = target + dir;
 	col->SetWorldPos(pos);
+
+
+	if (!hitBox->colOnOff)
+	{
+		// Scene01 에서 때린 뒤 colOnoff = false가 됨, 이후 false면 들어와서 0.7초 후에 true로 변경시킴
+		if (TIMER->GetTick(attackTime, 0.7f))
+		{
+			hitBox->colOnOff = true;
+		}
+	}
+
+
 
 	if (INPUT->KeyUp(VK_LBUTTON))
 	{
 		swordState = SwordState::IDLE;
 		sword->ChangeAnim(ANIMSTATE::STOP, 0.1f);
 		sword->frame.x = 0;
+
+		hitBox->rotationY = 0.0f;
+		hitBox->SetLocalPos(Vector2(0.0f, 0.0f));
+		hitBox->scale.x = 15.0f * 1.5f;
+
+		hitBox->colOnOff = false;
+
 	}
 }

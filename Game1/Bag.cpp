@@ -129,6 +129,17 @@ void Bag::Render()
 	}
 }
 
+Vector2 Bag::GetHotbarPos(int x)
+{
+	return hotbar[x]->col->GetWorldPos();
+}
+
+Vector2 Bag::GetBagitemPos(int x, int y)
+{
+	return bagitem[x][y]->col->GetWorldPos();
+}
+
+
 void Bag::AddItem()
 {
 }
