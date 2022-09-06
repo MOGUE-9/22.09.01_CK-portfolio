@@ -19,6 +19,10 @@ Torch::Torch()
 	torchIcon->SetParentRT(*col);           
 	torchIcon->visible = false;
 
+	range = new ObCircle();
+	range->scale = Vector2(16.0f, 16.0f)*2.0f;
+	range->isFilled = false;
+	range->SetParentRT(*col);
 
 	torchState = TorchState::STAND;
 }
@@ -58,6 +62,7 @@ void Torch::Update()
 	col->Update();
 	torch->Update();
 	torchIcon->Update();
+	range->Update();
 
 }
 
@@ -67,16 +72,29 @@ void Torch::Render()
 	col->Render();
 	torch->Render();
 	torchIcon->Render();
+	range->Render();
 }
 
 void Torch::Stand()
 {
 	a = 0;
+
+	col->scale = Vector2(10.0f, 15.0f) * 2.0f;
+
+	torch->visible = true;
+	col->visible = true;
+	range->visible = false;
+	torchIcon->visible = false;
+
 	if (count == 0)
 	{
 		torchState = TorchState::MINI;
+
+		col->visible = false;
 		torch->visible = false;
 		torchIcon->visible = true;
+		range->visible = true;
+
 	}
 }
 
@@ -84,20 +102,36 @@ void Torch::Mini()
 {
 	a = 1;
 
+	
+	if (TIMER->GetTick(udTimer, 1.0f))
+	{
+		ud.y *= -1.0f;
+	}
+
+	col->MoveWorldPos(ud * 5.0f * DELTA);
+
+
+
 	Vector2 moveDir = playerPivot - col->GetWorldPos();
 
-	col->MoveWorldPos(moveDir * 10.0f * DELTA);
-
-	if (col->GetWorldPos() == playerPivot)
+	if (range->Intersect(getBox))
+	{
+		col->MoveWorldPos(moveDir * 5.0f * DELTA);
+	}
+	
+	if (col->Intersect(getBox))
 	{
 		torchState = TorchState::NONE;
 	}
+
 }
 
 void Torch::None()
 {
 	a = 2;
 
+	col->visible = false;
+	range->visible = false;
 	torchIcon->visible = false;
 }
 

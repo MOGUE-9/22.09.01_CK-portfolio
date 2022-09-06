@@ -39,6 +39,10 @@ public:
 		col->SetWorldPos(pos);
 	}
 
+	ObRect* ReturnColBox()
+	{
+		return col;
+	}
 
 	vector<Vector2>& GetFoot()
 	{

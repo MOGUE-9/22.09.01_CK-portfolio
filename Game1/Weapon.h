@@ -13,14 +13,17 @@ class Weapon
 {
 protected:
 
-	ObRect* col;
-	Vector2 target;
+	ObRect*		col;
+	Vector2		target;
 
-	ObRect* hitBox;
+	ObCircle*	range;
+	ObRect*		hitBox;
 
-	int		mDirState;
+	ObRect*		getBox; //pl에게 자석처럼 끌려가기 위한 용도의 getBox
 
-	float	attackTime;
+	int			mDirState;
+
+	float		attackTime;
 
 
 public:
@@ -46,8 +49,8 @@ public:
 
 	ObRect* ReturnCol();
 
-
 	ObRect* ReturnHitBox();
+	void GetHiBox(ObRect* box);
 
 };
 

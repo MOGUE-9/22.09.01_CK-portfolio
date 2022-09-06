@@ -43,3 +43,8 @@ ObRect* Weapon::ReturnHitBox()
 {
 	return hitBox;
 }
+
+void Weapon::GetHiBox(ObRect* box)
+{
+	getBox = box;
+}

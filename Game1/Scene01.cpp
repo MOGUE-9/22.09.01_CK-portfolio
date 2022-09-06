@@ -24,9 +24,9 @@ Scene01::Scene01()
 
 
     //mon = new Monster();
-    //map = new ObTileMap();
-    //map->file = "map1.txt";
-    //map->Load();
+    map = new ObTileMap();
+    map->file = "map1.txt";
+    map->Load();
     //map->CreateTileCost();
     //
     //m.lock();
@@ -97,6 +97,9 @@ void Scene01::Update()
     {
         isOpenBag = !isOpenBag;
     }
+
+    torch->GetPlayer(pl->GetPos());
+
 
     pickAxe->SetTarget(pl->GetPos());
     sword->SetTarget(pl->GetPos());
@@ -189,7 +192,7 @@ void Scene01::Update()
 
     //mon->SetTarget(pl->GetPos());
     //mon->Update();
-    //map->Update();
+    map->Update();
     CAM->position = pl->GetPos();
 }
 
@@ -204,9 +207,10 @@ void Scene01::LateUpdate()
 
     if (sword->ReturnHitBox()->Intersect(torch->ReturnCol()))
     {
-        cout << "ÀÌ°ÇµÅ?" << endl;  //µÊ!!!!
+        //cout << "ÀÌ°ÇµÅ?" << endl;  //µÊ!!!!
         sword->attackCoolTime();
         torch->GetPlayer(pl->GetPos());
+        torch->GetHiBox(pl->ReturnColBox());
         
         torch->count--;
     }
@@ -241,6 +245,8 @@ void Scene01::Render()
     //                               L  T   R   B
     //DWRITE->RenderText(L"¾È³ç\n¾È³ç", RECT{ 300,100,(long)app.GetWidth(),(long)app.GetHalfHeight() },
     //    30.0f, L"ÈŞ¸Õ¸ÅÁ÷Ã¼", Color(1, 0, 0, 1), DWRITE_FONT_WEIGHT_BOLD);
+
+
     //map->Render();
 
     

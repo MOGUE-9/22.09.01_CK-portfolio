@@ -4,15 +4,19 @@ Icon::Icon()
 {
 	iconType.weapon = new ObImage(L"iconSword.png");
 	iconType.weapon->scale = Vector2(20.0f, 20.0f);
+	iconType.weapon->space = SPACE::SCREEN; //화면고정 UI (카메라고정)
 
 	iconType.tool = new ObImage(L"iconPickaxe.png");
 	iconType.tool->scale = Vector2(20.0f, 20.0f);
+	iconType.tool->space = SPACE::SCREEN; //화면고정 UI (카메라고정)
 
 	iconType.torch = new ObImage(L"iconTorch.png");
 	iconType.torch->scale = Vector2(20.0f, 20.0f);
+	iconType.torch->space = SPACE::SCREEN; //화면고정 UI (카메라고정)
 
 	iconType.wood = new ObImage(L"iconWood.png");
 	iconType.wood->scale = Vector2(20.0f, 20.0f);
+	iconType.wood->space = SPACE::SCREEN; //화면고정 UI (카메라고정)
 
 
 	itemType = ItemType::NONE;

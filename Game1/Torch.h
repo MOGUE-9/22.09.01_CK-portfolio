@@ -16,6 +16,8 @@ class Torch : public Weapon
 
 	bool		isInterSec{ false };
 
+	float		udTimer;
+	Vector2		ud{ 0.0f, 1.0f }; //mini상태일때 위아래로 제자리 움직임 방향
 	Vector2		playerPivot; //mini상태일때 가야할 좌표
 
 public:
