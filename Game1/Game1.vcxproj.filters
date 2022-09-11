@@ -39,6 +39,9 @@
     <ClInclude Include="Torch.h">
       <Filter>Weapon</Filter>
     </ClInclude>
+    <ClInclude Include="SelectBox.h">
+      <Filter>UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -77,6 +80,9 @@
     </ClCompile>
     <ClCompile Include="Torch.cpp">
       <Filter>Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="SelectBox.cpp">
+      <Filter>UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

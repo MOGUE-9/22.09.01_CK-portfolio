@@ -101,6 +101,11 @@ void Icon::AddItem(ItemType type)
 	}
 }
 
+ItemType Icon::GetItem()
+{
+	return itemType;
+}
+
 void Icon::Weapon()
 {
 	iconType.weapon->visible = true;

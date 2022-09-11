@@ -16,10 +16,10 @@ Sword::Sword()
 	hitBox->SetParentRT(*col);
 	hitBox->isFilled = false;
 
-	sword = new ObImage(L"Sword.png");
-	sword->scale = Vector2(40.0f, 40.0f) * 1.5f;
-	sword->maxFrame = Int2(7, 1);
-	sword->SetParentRT(*col);
+	img = new ObImage(L"Sword.png");
+	img->scale = Vector2(40.0f, 40.0f) * 1.5f;
+	img->maxFrame = Int2(7, 1);
+	img->SetParentRT(*col);
 
 	swordState = SwordState::IDLE;
 }
@@ -27,7 +27,7 @@ Sword::Sword()
 Sword::~Sword()
 {
 	SafeDelete(col);
-	SafeDelete(sword);
+	SafeDelete(img);
 }
 
 void Sword::Update()
@@ -36,10 +36,6 @@ void Sword::Update()
 	col->SetWorldPos(pos);
 
 	SetWeaponPos(INPUT->GetMouseWorldPos());
-
-
-
-
 
 
 	switch (swordState)
@@ -54,14 +50,14 @@ void Sword::Update()
 
 	col->Update();
 	hitBox->Update();
-	sword->Update();
+	img->Update();
 }
 
 void Sword::Render()
 {
 	col->Render();
 	hitBox->Render();
-	sword->Render();
+	img->Render();
 }
 
 
@@ -70,14 +66,18 @@ void Sword::Idle()
 	col->scale = Vector2(10.0f, 20.0f) * 1.5f;
 	//sword->rotationY = 0.0f;
 
-	if (INPUT->KeyPress(VK_LBUTTON))
+	if (gearOnoff)
 	{
-		swordState = SwordState::ATTACK;
-		float time = 4.0f / 70.0f;
-		sword->ChangeAnim(ANIMSTATE::LOOP, time);
-		attackTime = 0.0f;
-		hitBox->colOnOff = true;
+		if (INPUT->KeyPress(VK_LBUTTON))
+		{
+			swordState = SwordState::ATTACK;
+			float time = 4.0f / 70.0f;
+			img->ChangeAnim(ANIMSTATE::LOOP, time);
+			attackTime = 0.0f;
+			hitBox->colOnOff = true;
+		}
 	}
+
 }
 
 void Sword::Attack()
@@ -90,7 +90,7 @@ void Sword::Attack()
 	if (mDirState == mDir_L)
 	{
 		//sword->rotationY = 180.0f;
-		sword->reverseLR = true;
+		img->reverseLR = true;
 		dir.x = -8.0f;
 
 		hitBox->rotationY = PI;
@@ -99,7 +99,7 @@ void Sword::Attack()
 	}
 	else if (mDirState == mDir_B)
 	{
-		sword->reverseLR = false;
+		img->reverseLR = false;
 		dir.x = -8.0f;
 
 		hitBox->rotationY = 0.0f;
@@ -108,7 +108,7 @@ void Sword::Attack()
 	}
 	else if (mDirState == mDir_T)
 	{
-		sword->reverseLR = true;
+		img->reverseLR = true;
 		dir.x = 8.0f;
 		dir.y = 15.0f;
 
@@ -118,8 +118,8 @@ void Sword::Attack()
 	}
 	else if(mDirState == mDir_R)
 	{
-		//sword->rotationY = 0.0f;
-		sword->reverseLR = false;
+		//img->rotationY = 0.0f;
+		img->reverseLR = false;
 		dir.x = 8.0f;
 
 		hitBox->rotationY = 0.0f;
@@ -145,8 +145,8 @@ void Sword::Attack()
 	if (INPUT->KeyUp(VK_LBUTTON))
 	{
 		swordState = SwordState::IDLE;
-		sword->ChangeAnim(ANIMSTATE::STOP, 0.1f);
-		sword->frame.x = 0;
+		img->ChangeAnim(ANIMSTATE::STOP, 0.1f);
+		img->frame.x = 0;
 
 		hitBox->rotationY = 0.0f;
 		hitBox->SetLocalPos(Vector2(0.0f, 0.0f));

@@ -8,7 +8,7 @@ enum class SwordState
 
 class Sword : public Weapon
 {
-	ObImage*	sword;
+	//ObImage*	sword;
 
 	SwordState	swordState;
 

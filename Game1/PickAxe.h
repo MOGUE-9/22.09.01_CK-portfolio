@@ -7,7 +7,7 @@ enum class AxeState
 
 class PickAxe : public Weapon
 {
-	ObImage* axe;
+	//ObImage* axe;
 
 	AxeState axeState;
 

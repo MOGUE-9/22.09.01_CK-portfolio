@@ -7,12 +7,12 @@ Torch::Torch()
 	col->SetWorldPos(Vector2(100.0f, 100.0f));
 	col->isFilled = false;
 
-	torch = new ObImage(L"Torch.png");
-	torch->maxFrame = Int2(6, 1);
-	torch->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
-	torch->scale = Vector2(32.0f, 32.0f) * 2.0f;
-	torch->SetParentRT(*col);
-	torch->visible = true;
+	img = new ObImage(L"Torch.png");
+	img->maxFrame = Int2(6, 1);
+	img->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
+	img->scale = Vector2(32.0f, 32.0f) * 2.0f;
+	img->SetParentRT(*col);
+	img->visible = true;
 
 	torchIcon = new ObImage(L"iconTorchS.png");
 	torchIcon->scale = Vector2(16.0f, 16.0f) * 2.0f;
@@ -30,7 +30,10 @@ Torch::Torch()
 Torch::~Torch()
 {
 	SafeDelete(col);
-	SafeDelete(torch);
+	SafeDelete(img);
+	SafeDelete(torchIcon);
+	SafeDelete(range);
+
 }	
 
 void Torch::Update()
@@ -42,8 +45,6 @@ void Torch::Update()
 			col->SetWorldPos(INPUT->GetMouseWorldPos());
 		}
 	}
-
-	cout << a << endl;
 
 	switch (torchState)
 	{
@@ -60,7 +61,7 @@ void Torch::Update()
 
 
 	col->Update();
-	torch->Update();
+	img->Update();
 	torchIcon->Update();
 	range->Update();
 
@@ -70,18 +71,18 @@ void Torch::Render()
 {
 
 	col->Render();
-	torch->Render();
+	img->Render();
 	torchIcon->Render();
 	range->Render();
 }
 
 void Torch::Stand()
 {
-	a = 0;
+	//a = 0;
 
 	col->scale = Vector2(10.0f, 15.0f) * 2.0f;
 
-	torch->visible = true;
+	img->visible = true;
 	col->visible = true;
 	range->visible = false;
 	torchIcon->visible = false;
@@ -91,7 +92,7 @@ void Torch::Stand()
 		torchState = TorchState::MINI;
 
 		col->visible = false;
-		torch->visible = false;
+		img->visible = false;
 		torchIcon->visible = true;
 		range->visible = true;
 
@@ -100,7 +101,7 @@ void Torch::Stand()
 
 void Torch::Mini()
 {
-	a = 1;
+	//a = 1;
 
 	
 	if (TIMER->GetTick(udTimer, 1.0f))
@@ -128,7 +129,7 @@ void Torch::Mini()
 
 void Torch::None()
 {
-	a = 2;
+	//a = 2;
 
 	col->visible = false;
 	range->visible = false;

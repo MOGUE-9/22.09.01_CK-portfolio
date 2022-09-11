@@ -21,13 +21,10 @@ private:
 	ObImage* eat;
 	ObImage* stand;
 
-
-
 	void Weapon();
 	void Food();
 	void Tool();
 	void None();
-
 
 public:
 	OnScreen();
@@ -35,5 +32,7 @@ public:
 
 	void Update();
 	void Render();
+
+	void SetItemType(ItemType itType);
 };
 

@@ -18,8 +18,7 @@ private:
 	//가방열렸냐? - 여닫힘에 따라 icons 위치 재설정!
 	bool		isOpenBag{ false };
 
-	ItemType	saveType;
-
+	ItemType	saveType; //장비타입 저장용?
 
 	ObTileMap* map;
 

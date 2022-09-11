@@ -24,27 +24,18 @@ void Weapon::SetWeaponPos(Vector2 target)
 	}
 }
 
-int Weapon::GetWeaponDir()
+void Weapon::GearOn()
 {
-	return mDirState;
+	gearOnoff = true;
+	col->visible = true;
+	img->visible = true;
+	gearOnoff = true;
 }
 
-void Weapon::attackCoolTime()
+void Weapon::GearOff()
 {
-	hitBox->colOnOff = false;
-}
-
-ObRect* Weapon::ReturnCol()
-{
-	return col;
-}
-
-ObRect* Weapon::ReturnHitBox()
-{
-	return hitBox;
-}
-
-void Weapon::GetHiBox(ObRect* box)
-{
-	getBox = box;
+	gearOnoff = false;
+	col->visible = false;
+	img->visible = false;
+	gearOnoff = false;
 }

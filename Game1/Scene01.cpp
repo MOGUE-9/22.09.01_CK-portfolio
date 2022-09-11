@@ -8,8 +8,13 @@ Scene01::Scene01()
     weapon = new Weapon();
     
     pickAxe = new PickAxe();
+    pickAxe->GearOff();
+
     sword = new Sword();
+    sword->GearOff();
+    
     torch = new Torch();
+
 
     bags = new Bag();
     screenUI = new OnScreen();
@@ -21,6 +26,7 @@ Scene01::Scene01()
             icons[x][y] = new Icon();
         }
     }
+    icons[0][0]->AddItem(ItemType::WEAPON);
 
 
     //mon = new Monster();
@@ -93,6 +99,13 @@ void Scene01::Update()
 {
     //ImGui::SliderFloat2("Scale", (float*)&map->scale, 0.0f, 100.0f);
 
+    if (INPUT->KeyDown('Q'))
+    {
+        icons[0][0]->AddItem(ItemType::WEAPON);
+    }
+
+
+
     if (INPUT->KeyDown(VK_TAB))
     {
         isOpenBag = !isOpenBag;
@@ -100,9 +113,17 @@ void Scene01::Update()
 
     torch->GetPlayer(pl->GetPos());
 
-
     pickAxe->SetTarget(pl->GetPos());
     sword->SetTarget(pl->GetPos());
+
+    //icons의 Type을 지속적으로 bag에 업데이트 해주기
+    for (int y = 0; y < bagY; y++)
+    {
+        for (int x = 0; x < bagX; x++)
+        {
+            bags->SetBagitemType(x, y, icons[x][y]->GetItem());
+        }
+    }
 
     if (!isOpenBag)
     {
@@ -121,6 +142,47 @@ void Scene01::Update()
             }
         }
     }
+
+
+
+   for (int x = 0; x < bagX; x++)
+   {
+       if (bags->ReturnCol()->Intersect(bags->ReturnHotbarCol(x)))
+       {
+
+           if (bags->GetBagitemType(x , 0) == ItemType::WEAPON)
+           {
+               bags->AddItem(bags->GetBagitemType(x, 0));
+               sword->GearOn();
+               pickAxe->GearOff();
+               torch->GearOff();
+           }
+           else if (bags->GetBagitemType(x, 0) == ItemType::TOOL)
+           {
+               bags->AddItem(bags->GetBagitemType(x, 0));
+               pickAxe->GearOn();
+               sword->GearOff();
+               torch->GearOff();
+           }
+           else if (bags->GetBagitemType(x, 0) == ItemType::TORCH)
+           {
+               bags->AddItem(bags->GetBagitemType(x, 0));
+               torch->GearOn();
+               sword->GearOff();
+               pickAxe->GearOff();
+           }
+           else if (bags->GetBagitemType(x, 0) == ItemType::NONE)
+           {
+               bags->AddItem(bags->GetBagitemType(x, 0));
+               sword->GearOff();
+               pickAxe->GearOff();
+               torch->GearOff();
+           }
+       }
+   }
+
+   screenUI->SetItemType(bags->GetItemType());
+
 
     //우클릭햇을때
     //if (INPUT->KeyDown(VK_RBUTTON))
@@ -193,12 +255,20 @@ void Scene01::Update()
     //mon->SetTarget(pl->GetPos());
     //mon->Update();
     map->Update();
+
     CAM->position = pl->GetPos();
 }
 
 void Scene01::LateUpdate()
 {
     //INPUT->GetMouseWorldPos()
+
+
+
+
+
+
+
 
     //if (torch->isInterSect(sword->ReturnHitBox()))
     //{
@@ -211,7 +281,7 @@ void Scene01::LateUpdate()
         sword->attackCoolTime();
         torch->GetPlayer(pl->GetPos());
         torch->GetHiBox(pl->ReturnColBox());
-        
+
         torch->count--;
     }
 
@@ -290,7 +360,6 @@ void Scene01::Render()
             }
         }
     }
-
 
     //for (int y = 0; y < bagY; y++)
     //{

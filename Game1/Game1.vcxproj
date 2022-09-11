@@ -29,6 +29,7 @@
     <ClInclude Include="Monster.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Scene01.h" />
+    <ClInclude Include="SelectBox.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Sword.h" />
     <ClInclude Include="Torch.h" />
@@ -45,6 +46,7 @@
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scene01.cpp" />
+    <ClCompile Include="SelectBox.cpp" />
     <ClCompile Include="Sword.cpp" />
     <ClCompile Include="Torch.cpp" />
     <ClCompile Include="Weapon.cpp" />

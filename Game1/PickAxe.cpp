@@ -7,10 +7,10 @@ PickAxe::PickAxe()
 	col->scale = Vector2(40.0f, 40.0f) * 5.0f;
 	col->isFilled = false;
 
-	axe = new ObImage(L"PickAxe.png");
-	axe->scale = Vector2(40.0f, 40.0f) * 5.0f;
-	axe->maxFrame = Int2(7, 1);
-	axe->SetParentRT(*col);
+	img = new ObImage(L"PickAxe.png");
+	img->scale = Vector2(40.0f, 40.0f) * 5.0f;
+	img->maxFrame = Int2(7, 1);
+	img->SetParentRT(*col);
 
 	axeState = AxeState::IDLE;
 }
@@ -18,7 +18,7 @@ PickAxe::PickAxe()
 PickAxe::~PickAxe()
 {
 	SafeDelete(col);
-	SafeDelete(axe);
+	SafeDelete(img);
 }
 
 void PickAxe::Update()
@@ -35,13 +35,13 @@ void PickAxe::Update()
 		break;
 	}
 	col->Update();
-	axe->Update();
+	img->Update();
 }
 
 void PickAxe::Render()
 {
 	col->Render();
-	axe->Render();
+	img->Render();
 }
 
 void PickAxe::Idle()
@@ -50,7 +50,7 @@ void PickAxe::Idle()
 	{
 		axeState = AxeState::ATTACK;
 		float time = 4.0f / 70.0f;
-		axe->ChangeAnim(ANIMSTATE::LOOP, time);
+		img->ChangeAnim(ANIMSTATE::LOOP, time);
 	}
 }
 
@@ -59,7 +59,7 @@ void PickAxe::Attack()
 	if (INPUT->KeyUp(VK_LBUTTON))
 	{
 		axeState = AxeState::IDLE;
-		axe->ChangeAnim(ANIMSTATE::STOP, 0.1f);
-		axe->frame.x = 0;
+		img->ChangeAnim(ANIMSTATE::STOP, 0.1f);
+		img->frame.x = 0;
 	}
 }

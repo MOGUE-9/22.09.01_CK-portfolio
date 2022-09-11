@@ -9,7 +9,9 @@ enum class TorchState
 
 class Torch : public Weapon
 {
-	ObImage*	torch;
+	//ObImage*	torch;
+
+
 	ObImage*	torchIcon;
 
 	TorchState	torchState;
@@ -23,7 +25,7 @@ class Torch : public Weapon
 public:
 
 	int			count{ 3 };
-	int a;
+	//int			a; //count 잘 깎이는지 확인용이었음
 
 
 public:

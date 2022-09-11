@@ -15,6 +15,8 @@
 #include "OnScreen.h"
 #include "Icon.h"
 #include "Bag.h"
+#include "SelectBox.h"
+
 
 
 extern int loadingCount;

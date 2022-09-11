@@ -30,6 +30,7 @@ public:
 
 	//타입 저장하는 함수 :: !isIn, 안에 아무것도 없을 때만 저장되도록!!
 	void AddItem(ItemType type);
+	ItemType GetItem();
 
 	void SetIconPos(Vector2 pos);
 };

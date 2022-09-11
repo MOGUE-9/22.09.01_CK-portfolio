@@ -8,6 +8,7 @@ Bag::Bag()
 	bagBG->space = SPACE::SCREEN; //화면고정 UI (카메라고정)
 	bagBG->visible = false;
 
+
 	for (int y = 0; y < bagY; y++)
 	{
 		for (int x = 0; x < bagX; x++)
@@ -36,6 +37,8 @@ Bag::Bag()
 			//	-20.0f + (24.0f * 2.0f + 10.0f) * y + 5.0f * y));
 			bagitem[x][y]->img->visible = false;
 
+			bagitem[x][y]->type = ItemType::NONE;
+
 		}
 	}
 
@@ -57,9 +60,24 @@ Bag::Bag()
 		hotbar[x]->img->scale = Vector2(24.0f, 24.0f) * 2.0f;
 		hotbar[x]->img->space = SPACE::SCREEN; //화면고정 UI (카메라고정)
 
+		hotbar[x]->type = ItemType::NONE;
 	}
 
 
+	selectBox = new InBagItem();
+
+	selectBox->col = new ObRect();
+	selectBox->col->SetWorldPos(Vector2(-240.0f, -app.GetHalfHeight() + (24.0f * 2.0f)));
+	selectBox->col->scale = Vector2(24.0f, 24.0f) * 2.0f;
+	selectBox->col->isFilled = false;
+	selectBox->col->space = SPACE::SCREEN; //화면고정 UI (카메라고정)
+
+	selectBox->img = new ObImage(L"bagSelect.png");
+	selectBox->img->SetParentRT(*selectBox->col);
+	selectBox->img->scale = Vector2(24.0f, 24.0f) * 2.0f;
+	selectBox->img->space = SPACE::SCREEN; //화면고정 UI (카메라고정)
+
+	selectBox->type = ItemType::NONE;
 
 }
 
@@ -69,6 +87,63 @@ Bag::~Bag()
 
 void Bag::Update()
 {
+	if (INPUT->KeyDown(WM_MOUSEWHEEL))
+	{
+		if (WM_MOUSEWHEEL < 120 && WM_MOUSEWHEEL > 0)
+		{
+			cout << "위로" << endl;
+		}
+		else if (WM_MOUSEWHEEL > -120 && WM_MOUSEWHEEL < 0)
+		{
+			cout << "아래로" << endl;
+
+		}
+	}
+
+	//아이콘 변경 확인용 커맨드
+	if (INPUT->KeyPress('1'))
+	{
+		selectBox->col->SetWorldPos(hotbar[0]->col->GetWorldPos());
+	}
+	if (INPUT->KeyPress('2'))
+	{
+		selectBox->col->SetWorldPos(hotbar[1]->col->GetWorldPos());
+	}
+	if (INPUT->KeyPress('3'))
+	{
+		selectBox->col->SetWorldPos(hotbar[2]->col->GetWorldPos());
+	}
+	if (INPUT->KeyPress('4'))
+	{
+		selectBox->col->SetWorldPos(hotbar[3]->col->GetWorldPos());
+	}
+	if (INPUT->KeyPress('5'))
+	{
+		selectBox->col->SetWorldPos(hotbar[4]->col->GetWorldPos());
+	}
+	if (INPUT->KeyPress('6'))
+	{
+		selectBox->col->SetWorldPos(hotbar[5]->col->GetWorldPos());
+	}
+	if (INPUT->KeyPress('7'))
+	{
+		selectBox->col->SetWorldPos(hotbar[6]->col->GetWorldPos());
+	}
+	if (INPUT->KeyPress('8'))
+	{
+		selectBox->col->SetWorldPos(hotbar[7]->col->GetWorldPos());
+	}
+	if (INPUT->KeyPress('9'))
+	{
+		selectBox->col->SetWorldPos(hotbar[8]->col->GetWorldPos());
+	}
+	if (INPUT->KeyPress('0'))
+	{
+		selectBox->col->SetWorldPos(hotbar[9]->col->GetWorldPos());
+	}
+
+
+
 	//탭누르면 가방열기 <-> 닫기
 	if (INPUT->KeyDown(VK_TAB))
 	{
@@ -91,7 +166,6 @@ void Bag::Update()
 	}
 
 
-
 	bagBG->Update();
 
 	for (int y = 0; y < bagY; y++)
@@ -108,6 +182,9 @@ void Bag::Update()
 		hotbar[x]->col->Update();
 		hotbar[x]->img->Update();
 	}
+
+	selectBox->col->Update();
+	selectBox->img->Update();
 }
 
 void Bag::Render()
@@ -127,6 +204,9 @@ void Bag::Render()
 		hotbar[x]->col->Render();
 		hotbar[x]->img->Render();
 	}
+
+	selectBox->col->Render();
+	selectBox->img->Render();
 }
 
 Vector2 Bag::GetHotbarPos(int x)
@@ -139,11 +219,37 @@ Vector2 Bag::GetBagitemPos(int x, int y)
 	return bagitem[x][y]->col->GetWorldPos();
 }
 
-
-void Bag::AddItem()
+ItemType Bag::GetBagitemType(int x, int y)
 {
+	return bagitem[x][y]->type;
+}
+
+void Bag::SetBagitemType(int x, int y, ItemType itType)
+{
+	bagitem[x][y]->type = itType;
+}
+
+
+void Bag::AddItem(ItemType itType)
+{
+	selectBox->type = itType;
+}
+
+ItemType Bag::GetItemType()
+{
+	return selectBox->type;
 }
 
 void Bag::CheckItem()
 {
+	for (int x = 0; x < 10; x++)
+	{
+		//선택상자랑 단축바 위치 중 한 곳과 같을때
+		if (selectBox->col->GetWorldPos() == hotbar[x]->col->GetWorldPos())
+		{
+			//아이템타입 검사
+
+		}
+	}
+
 }
