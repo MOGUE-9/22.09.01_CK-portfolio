@@ -10,6 +10,8 @@ class Sword : public Weapon
 {
 	//ObImage*	sword;
 
+	float		att{ 5.0f }; //무기공격력
+
 	SwordState	swordState;
 
 	float		attackTime;

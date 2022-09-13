@@ -16,6 +16,9 @@ Scene01::Scene01()
     torch = new Torch();
 
 
+    mainBuild = new MainCore();
+
+
     bags = new Bag();
     screenUI = new OnScreen();
 
@@ -29,10 +32,16 @@ Scene01::Scene01()
     icons[0][0]->AddItem(ItemType::WEAPON);
 
 
-    //mon = new Monster();
-    map = new ObTileMap();
-    map->file = "map1.txt";
-    map->Load();
+    mon = new Monster();
+    map_RT = new ObTileMap();
+    map_RT->file = "map1.txt";
+    map_RT->Load();
+
+    map_LT = new ObTileMap();
+    map_LT->file = "map2.txt";
+    map_LT->Load();
+
+
     //map->CreateTileCost();
     //
     //m.lock();
@@ -83,8 +92,10 @@ Scene01::Scene01()
 Scene01::~Scene01()
 {
     SafeDelete(pl);
-    //SafeDelete(mon);
-    //SafeDelete(map);
+    SafeDelete(mon);
+    SafeDelete(map_RT);
+    SafeDelete(map_LT);
+
 }
 
 void Scene01::Init()
@@ -252,9 +263,12 @@ void Scene01::Update()
         }
     }
 
-    //mon->SetTarget(pl->GetPos());
-    //mon->Update();
-    map->Update();
+    mon->SetTarget(pl->GetPos());
+    mon->Update();
+    map_RT->Update();
+    map_LT->Update();
+
+    mainBuild->Update();
 
     CAM->position = pl->GetPos();
 }
@@ -262,12 +276,6 @@ void Scene01::Update()
 void Scene01::LateUpdate()
 {
     //INPUT->GetMouseWorldPos()
-
-
-
-
-
-
 
 
     //if (torch->isInterSect(sword->ReturnHitBox()))
@@ -286,26 +294,35 @@ void Scene01::LateUpdate()
     }
 
 
-    //Int2 on;
-    //
-    //if (map->WorldPosToTileIdx(pl->GetPos(), on))
-    //{
-    //    ImGui::Text("TileState %d", map->GetTileState(on));
-    //}
-    //
-    //vector<Vector2>& Foot = pl->GetFoot();
-    //
-    //for (int i = 0; i < 4; i++)
-    //{
-    //    Int2 on;
-    //    if (map->WorldPosToTileIdx(Foot[i], on))
-    //    {
-    //        if (map->GetTileState(on) == TILE_WALL)
-    //        {
-    //            pl->StepBack();
-    //        }
-    //    }
-    //}
+    Int2 on;
+    
+    if (map_RT->WorldPosToTileIdx(pl->GetPos(), on))
+    {
+        ImGui::Text("TileState %d", map_RT->GetTileState(on));
+        ImGui::Text("TileState %d", map_LT->GetTileState(on));
+
+    }
+    
+    vector<Vector2>& Foot = pl->GetFoot();
+    
+    for (int i = 0; i < 4; i++)
+    {
+        Int2 on;
+        if (map_RT->WorldPosToTileIdx(Foot[i], on))
+        {
+            if (map_RT->GetTileState(on) == TILE_WALL)
+            {
+                pl->StepBack();
+            }
+        }
+        if (map_LT->WorldPosToTileIdx(Foot[i], on))
+        {
+            if (map_LT->GetTileState(on) == TILE_WALL)
+            {
+                pl->StepBack();
+            }
+        }
+    }
 
 
 }
@@ -317,12 +334,15 @@ void Scene01::Render()
     //    30.0f, L"ÈÞ¸Õ¸ÅÁ÷Ã¼", Color(1, 0, 0, 1), DWRITE_FONT_WEIGHT_BOLD);
 
 
-    //map->Render();
+    map_RT->Render();
+    map_LT->Render();
+    mainBuild->Render();
 
-    
+    mon->Render();
+
     if (sword->GetWeaponDir() == 2)
     {
-        //pickAxe->Render();
+        pickAxe->Render();
         sword->Render();
         torch->Render();
         pl->Render();
@@ -330,12 +350,11 @@ void Scene01::Render()
     else
     {
         pl->Render();
-        //pickAxe->Render();
+        pickAxe->Render();
         sword->Render();
         torch->Render();
     }
 
-    //mon->Render();
 
 
 

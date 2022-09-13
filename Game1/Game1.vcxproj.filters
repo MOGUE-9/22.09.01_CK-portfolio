@@ -42,6 +42,12 @@
     <ClInclude Include="SelectBox.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="Boss.h">
+      <Filter>Chara</Filter>
+    </ClInclude>
+    <ClInclude Include="MainCore.h">
+      <Filter>Build</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -84,6 +90,12 @@
     <ClCompile Include="SelectBox.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="Boss.cpp">
+      <Filter>Chara</Filter>
+    </ClCompile>
+    <ClCompile Include="MainCore.cpp">
+      <Filter>Build</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">
@@ -97,6 +109,9 @@
     </Filter>
     <Filter Include="UI">
       <UniqueIdentifier>{ea477b01-6fec-42d1-8a18-501199490c34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Build">
+      <UniqueIdentifier>{837041ad-3eb2-4991-aeb0-a67ccdc609ed}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

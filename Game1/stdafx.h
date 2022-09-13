@@ -4,6 +4,7 @@
 
 #include "Character.h"
 #include "Player.h"
+#include "Boss.h"
 #include "Monster.h"
 
 #include "Weapon.h"
@@ -17,6 +18,7 @@
 #include "Bag.h"
 #include "SelectBox.h"
 
+#include "MainCore.h"
 
 
 extern int loadingCount;

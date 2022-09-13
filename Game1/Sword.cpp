@@ -83,7 +83,7 @@ void Sword::Idle()
 void Sword::Attack()
 {
 	Vector2 dir = Vector2(0.0f, 0.0f);
-	attackTime += DELTA;
+	//attackTime += DELTA;
 
 	//cout << mDirState << endl;
 

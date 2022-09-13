@@ -7,10 +7,10 @@ void Main::Init()
 	//찍기 전에 파일 이름 확인 했는지~!!!
 
 	map = new ObTileMap();
-	map->scale = Vector2(26.0f, 26.0f) * 2.0f;
+	map->scale = Vector2(36.0f, 36.0f);
 	map->SetWorldPos(Vector2(0.0f, 0.0f));
-	map->file = "map1.txt";
-	map->Load();
+	//map->file = "map1.txt";
+	//map->Load();
 	LIGHT->light.radius = 3000.0f;
 
 	imgIdx = 0;

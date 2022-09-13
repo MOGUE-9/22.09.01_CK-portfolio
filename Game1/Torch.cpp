@@ -38,13 +38,13 @@ Torch::~Torch()
 
 void Torch::Update()
 {
-	if (col->Intersect(INPUT->GetMouseWorldPos()))
-	{
-		if (INPUT->KeyPress(VK_LBUTTON))
-		{
-			col->SetWorldPos(INPUT->GetMouseWorldPos());
-		}
-	}
+	//if (col->Intersect(INPUT->GetMouseWorldPos()))
+	//{
+	//	if (INPUT->KeyPress(VK_LBUTTON))
+	//	{
+	//		col->SetWorldPos(INPUT->GetMouseWorldPos());
+	//	}
+	//}
 
 	switch (torchState)
 	{

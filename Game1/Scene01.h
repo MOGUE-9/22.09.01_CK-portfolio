@@ -4,7 +4,7 @@ class Scene01 : public Scene
 {
 private:
 	Player* pl;
-	//Monster* mon;
+	Monster* mon;
 	
 	Weapon*		weapon;
 	PickAxe*	pickAxe;
@@ -20,14 +20,18 @@ private:
 
 	ItemType	saveType; //장비타입 저장용?
 
-	ObTileMap* map;
+	ObTileMap*	map_RT; //생성위치 기준 우상
+	ObTileMap*	map_LT; //생성위치 기준 좌상
+
+
+	MainCore*	mainBuild;
 
 	//길찾기용 변수
 	vector<Tile*> PlWay;
 
 	//이동시킬 위치
-	Vector2 PlDest;
-	Vector2 PlSour;
+	Vector2		PlDest;
+	Vector2		PlSour;
 
 	//비율
 	float   g;
