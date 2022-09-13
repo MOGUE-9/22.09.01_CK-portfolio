@@ -293,6 +293,18 @@ void Scene01::LateUpdate()
         torch->count--;
     }
 
+    //내가 몬스터 때렸을 때!!
+    if (sword->ReturnHitBox()->Intersect(mon->ReturnColBox()))
+    {
+        sword->attackCoolTime();
+        mon->hp -= sword->att;
+
+        cout << mon->hp << endl;
+    }
+
+    //몬스터가 나 때렸을 때!!
+
+
 
     Int2 on;
     

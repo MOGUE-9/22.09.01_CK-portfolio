@@ -42,6 +42,7 @@ Monster::Monster()
 	range[2]->SetParentRT(*col);
 
 	monsterState = MonsterState::IDLE;
+	hp = 20;
 }
 
 Monster::~Monster()
@@ -55,36 +56,43 @@ Monster::~Monster()
 
 void Monster::Update()
 {
-
-	//col->MoveWorldPos(freeMov * 100.0f * DELTA);
-
-	if (TIMER->GetTick(moveTimer, 2.0f))
+	if (hp <= 0) //공격으로 인해 hp가 0이 됐을 경우
 	{
-		
+		col->visible = false;
+		col->colOnOff = false;
+
+		img->visible = false;
+		img->colOnOff = false;
+
+		monsterState = MonsterState::IDLE;
+		//cout << "몹 사망" << endl;
 	}
-
-
-	if (!isFind)
+	else
 	{
-		Vector2 dis = target - GetPos();
-		distance = dis.Length();
-	
-		switch (monsterState)
+		if (!isFind) //설정한 이유: scene01의 update에서 게속해서 target위치를 불러오기 때문에
+						// 설정하지 않으면 범위에 없어도?? 나한테 오는듯함 ? 아닌가? 해제해봄
 		{
-		case MonsterState::IDLE:
-			Idle();
-			break;
-		case  MonsterState::LOOK:
-			Look();
-			break;
-		case  MonsterState::MOVE:
-			Move();
-			break;
-		case  MonsterState::ATTACK:
-			Attack();
-			break;
+			Vector2 dis = target - GetPos();
+			distance = dis.Length();
+
+			switch (monsterState)
+			{
+			case MonsterState::IDLE:
+				Idle();
+				break;
+			case  MonsterState::LOOK:
+				Look();
+				break;
+			case  MonsterState::MOVE:
+				Move();
+				break;
+			case  MonsterState::ATTACK:
+				Attack();
+				break;
+			}
 		}
 	}
+	
 	col->Update();
 	img->Update();
 	range[0]->Update();
@@ -103,28 +111,70 @@ void Monster::Render()
 
 void Monster::Idle()
 {
+
+	col->MoveWorldPos(freeMov * 30.0f * DELTA);
+
+	if (TIMER->GetTick(moveTimer, 2.0f))
+	{
+		int dirX =	RANDOM->Int(0, 3);
+		switch (dirX)
+		{
+		case 0:
+			freeMov.x = 1.0f;
+			break;
+		case 1:
+			freeMov.x = -1.0f;
+			break;
+		case 2:
+			freeMov.x = 0.0f;
+			break;
+		}
+
+		int dirY = RANDOM->Int(0, 3);
+		switch (dirY)
+		{
+		case 0:
+			freeMov.y = 1.0f;
+			break;
+		case 1:
+			freeMov.y = -1.0f;
+			break;
+		case 2:
+			freeMov.y = 0.0f;
+			break;
+		}
+	}
+
 	//idle -> look
-	if (distance < (float)MonsterState::LOOK)
-	{
-		monsterState = MonsterState::LOOK;
-	}
-}
+	//if (distance < (float)MonsterState::LOOK)
+	//{
+	//	monsterState = MonsterState::LOOK;
+	//}
 
-void Monster::Look()
-{
-	LookTarget(target, img);
-
-	//look -> idle
-	if (distance > (float)MonsterState::LOOK)
-	{
-		monsterState = MonsterState::IDLE;
-	}
-
-	//look -> move
+	//idle -> move
 	if (distance < (float)MonsterState::MOVE)
 	{
 		monsterState = MonsterState::MOVE;
 	}
+}
+
+//굳이 필요하지 않을 것 같은 상태라 일단 제외
+void Monster::Look()
+{
+	////LookTarget(target, img);
+	//col->MoveWorldPos(freeMov * 30.0f * DELTA);
+
+	////look -> idle
+	//if (distance > (float)MonsterState::LOOK)
+	//{
+	//	monsterState = MonsterState::IDLE;
+	//}
+
+	////look -> move
+	//if (distance < (float)MonsterState::MOVE)
+	//{
+	//	monsterState = MonsterState::MOVE;
+	//}
 }
 
 void Monster::Move()
@@ -134,12 +184,12 @@ void Monster::Move()
 	moveDir = target - GetPos();
 	moveDir.Normalize();
 
-	col->MoveWorldPos(moveDir * 100.0f * DELTA);
+	col->MoveWorldPos(moveDir * 60.0f * DELTA);
 	
-	//move -> look
+	//move -> idle
 	if (distance > (float)MonsterState::MOVE)
 	{
-		monsterState = MonsterState::LOOK;
+		monsterState = MonsterState::IDLE;
 	}
 
 	////move -> attack

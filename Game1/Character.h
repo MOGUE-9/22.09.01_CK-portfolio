@@ -17,6 +17,7 @@ protected:
 	ObRect* col;
 	Vector2 moveDir;
 
+
 	int dirState;
 	int frameY[7];
 
