@@ -8,11 +8,13 @@ Monster::Monster()
 	col->scale = Vector2(28.0f, 28.0f);
 	col->color = Color(1.0f, 0.0f, 0.0f, 1.0f);
 
-	img = new ObImage(L"Mini.png");
 	img->SetParentRT(*col);
 	img->scale = Vector2(42.0f, 42.0f);
 	img->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
-	img->maxFrame.x = 6;
+	img->maxFrame.x = 10;
+
+
+
 
 	//frameY[Dir_R] = 0;
 	//frameY[Dir_L] = 1;
@@ -49,6 +51,9 @@ Monster::~Monster()
 {
 	SafeDelete(col);
 	SafeDelete(img);
+	SafeDelete(imgAtt);
+	SafeDelete(imgDie);
+
 	SafeDelete(range[0]);
 	SafeDelete(range[1]);
 	SafeDelete(range[2]);

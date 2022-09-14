@@ -3,8 +3,9 @@
 class Scene01 : public Scene
 {
 private:
-	Player* pl;
-	Monster* mon;
+	Player*		pl;
+	Monster*	mon;
+	Boss*		boss;
 	
 	Weapon*		weapon;
 	PickAxe*	pickAxe;

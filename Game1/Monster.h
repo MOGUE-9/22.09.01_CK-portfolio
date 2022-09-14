@@ -11,9 +11,9 @@ enum class MonsterState
 class Monster : public Character
 {
 private:
-	ObImage*		img; //기본 이미지
-	//ObImage*		imgAtt; //공격 이미지
-	//ObImage*		imgDie; //사망 이미지
+	ObImage*		img = new ObImage(L"Mini.png"); //기본 이미지
+	ObImage*		imgAtt = new ObImage(L"MiniAtt.png"); //공격 이미지
+	ObImage*		imgDie = new ObImage(L"MiniDie.png"); //사망 이미지
 
 	MonsterState	monsterState;
 	ObCircle*		range[3];

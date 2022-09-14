@@ -4,6 +4,8 @@ Scene01::Scene01()
 {
     LIGHT->light.radius = 2000.0f;
     pl = new Player();
+    mon = new Monster();
+    boss = new Boss();
 
     weapon = new Weapon();
     
@@ -32,7 +34,6 @@ Scene01::Scene01()
     icons[0][0]->AddItem(ItemType::WEAPON);
 
 
-    mon = new Monster();
     map_RT = new ObTileMap();
     map_RT->file = "map1.txt";
     map_RT->Load();
@@ -247,6 +248,10 @@ void Scene01::Update()
     //}
 
     pl->Update();
+    boss->Update();
+
+    mon->SetTarget(pl->GetPos());
+    mon->Update();
 
     pickAxe->Update();
     sword->Update();
@@ -263,8 +268,6 @@ void Scene01::Update()
         }
     }
 
-    mon->SetTarget(pl->GetPos());
-    mon->Update();
     map_RT->Update();
     map_LT->Update();
 
@@ -351,6 +354,7 @@ void Scene01::Render()
     mainBuild->Render();
 
     mon->Render();
+    boss->Render();
 
     if (sword->GetWeaponDir() == 2)
     {
