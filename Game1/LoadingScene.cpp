@@ -20,7 +20,9 @@ void CreateScene()
 
 LoadingScene::LoadingScene()
 {
-	bg = new ObImage(L"pepe.png");
+	bg = new ObImage(L"Title.png");
+	bg->maxFrame.x = 4;
+	bg->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
 	bg->scale = Vector2(app.GetWidth(), app.GetHeight());
 
 	rc = new ObRect();

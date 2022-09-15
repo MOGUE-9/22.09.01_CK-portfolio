@@ -10,11 +10,19 @@ Monster::Monster()
 
 	img->SetParentRT(*col);
 	img->scale = Vector2(42.0f, 42.0f);
-	img->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
+	img->ChangeAnim(ANIMSTATE::LOOP, 0.15f);
 	img->maxFrame.x = 10;
 
+	imgAtt->SetParentRT(*col);
+	imgAtt->visible = false;
+	imgAtt->scale = Vector2(42.0f, 42.0f);
+	imgAtt->ChangeAnim(ANIMSTATE::LOOP, 0.15f);
+	imgAtt->maxFrame.x = 10;
 
-
+	imgDie->SetParentRT(*col);
+	imgDie->visible = false;
+	imgDie->scale = Vector2(42.0f, 42.0f);
+	imgDie->maxFrame.x = 8;
 
 	//frameY[Dir_R] = 0;
 	//frameY[Dir_L] = 1;
@@ -63,22 +71,19 @@ void Monster::Update()
 {
 	if (hp <= 0) //공격으로 인해 hp가 0이 됐을 경우
 	{
-		col->visible = false;
-		col->colOnOff = false;
-
-		img->visible = false;
-		img->colOnOff = false;
-
-		monsterState = MonsterState::IDLE;
+		getHit = false;
+		monsterState = MonsterState::DIE;
+		Die();
 		//cout << "몹 사망" << endl;
 	}
 	else
 	{
-		if (!isFind) //설정한 이유: scene01의 update에서 게속해서 target위치를 불러오기 때문에
+		//if (!isFind) //설정한 이유: scene01의 update에서 게속해서 target위치를 불러오기 때문에
 						// 설정하지 않으면 범위에 없어도?? 나한테 오는듯함 ? 아닌가? 해제해봄
-		{
+		//{
 			Vector2 dis = target - GetPos();
 			distance = dis.Length();
+
 
 			switch (monsterState)
 			{
@@ -95,11 +100,13 @@ void Monster::Update()
 				Attack();
 				break;
 			}
-		}
+		//}
 	}
 	
 	col->Update();
 	img->Update();
+	imgAtt->Update();
+	imgDie->Update();
 	range[0]->Update();
 	range[1]->Update();
 	range[2]->Update();
@@ -109,6 +116,8 @@ void Monster::Render()
 {
 	col->Render();
 	img->Render();
+	imgAtt->Render();
+	imgDie->Render();
 	range[0]->Render();
 	range[1]->Render();
 	range[2]->Render();
@@ -184,13 +193,25 @@ void Monster::Look()
 
 void Monster::Move()
 {
-	LookTarget(target, img);
+	img->visible = true;
+	imgAtt->visible = false;
+
+
+	if (dirState == 0 || dirState == 1 || dirState == 2)
+	{
+		target += Vector2(25.0f, 0.0f);
+	}
+	else if (dirState == 3 || dirState == 4 || dirState == 5)
+	{
+		target += Vector2(-10.0f, 0.0f);
+	}
 
 	moveDir = target - GetPos();
 	moveDir.Normalize();
 
 	col->MoveWorldPos(moveDir * 60.0f * DELTA);
-	
+
+
 	//move -> idle
 	if (distance > (float)MonsterState::MOVE)
 	{
@@ -198,6 +219,16 @@ void Monster::Move()
 	}
 
 	////move -> attack
+	if (fightMod)
+	{
+		monsterState = MonsterState::ATTACK;
+	}
+	//if (TIMER->GetTick(moveTimer, 2.0f))
+	//{
+	//	monsterState = MonsterState::ATTACK;
+	//	getHit = true;
+	//}
+
 	//if (distance < (float)MonsterState::ATTACK)
 	//{
 	//	monsterState = MonsterState::ATTACK;
@@ -207,25 +238,110 @@ void Monster::Move()
 
 void Monster::Attack()
 {
-	LookTarget(target, img);
+	img->visible = false;
+	imgAtt->visible = true;
 
-	float plus;
-	if (scaleSwitching) plus = 1.0f;
-	else plus = -1.0f;
-
-	img->scale.x += plus * 200.0f * DELTA;
-	img->scale.y -= plus * 200.0f * DELTA;
-
-	if (img->scale.x < 50.0f || img->scale.y < 50.0f)
+	//마지막 프레임에 도달하면 상태변경
+	if (imgAtt->frame.x == 7)
 	{
-		scaleSwitching = !scaleSwitching;
+		//playerHP -= att;
+		getAttack = true;
+		monsterState = MonsterState::MOVE;
+		imgAtt->frame.x = 0;
 	}
+
+	//if (fightMod)
+	//{
+	//	monsterState = MonsterState::ATTACK;
+	//}
+	//float plus;
+	//if (scaleSwitching) plus = 1.0f;
+	//else plus = -1.0f;
+
+	//img->scale.x += plus * 200.0f * DELTA;
+	//img->scale.y -= plus * 200.0f * DELTA;
+
+	//if (img->scale.x < 50.0f || img->scale.y < 50.0f)
+	//{
+	//	scaleSwitching = !scaleSwitching;
+	//}
+
 
 	//attack -> move
 	if (distance > (float)MonsterState::ATTACK)
 	{
 		monsterState = MonsterState::MOVE;
-		img->scale.x = 128.0f;
-		img->scale.y = 127.0f;
 	}
 }
+
+
+void Monster::MonAtt(int& plHp)
+{
+	if (TIMER->GetTick(moveTimer, 1.2f))
+	{
+		if (!getHit)
+		{
+			plHp -= att;
+
+			//몸박으로 한대치고나면, 점프공격 상태로 변경
+			getHit != getHit;
+			getJump = !getJump;
+		}
+
+		//if (getJump)
+		//{
+		//	monsterState = MonsterState::ATTACK;
+		//	if (TIMER->GetTick(moveTimer, 2.0f))
+		//	{
+		//		plHp -= att;
+
+		//		getHit != getHit;
+		//		getJump = !getJump;
+		//	}
+		//}
+	}
+}
+
+void Monster::GetHp(int plHp)
+{
+	playerHP = plHp;
+}
+
+int Monster::SetHp()
+{
+	return playerHP;
+}
+
+
+
+
+void Monster::Die()
+{
+	col->visible = false;
+	col->colOnOff = false;
+
+	img->visible = false;
+	img->colOnOff = false;
+
+	imgAtt->visible = false;
+	imgAtt->colOnOff = false;
+
+	imgDie->visible = true;
+	imgDie->ChangeAnim(ANIMSTATE::LOOP, 0.15f);
+
+	//마지막 프레임에 도달하면 소멸되도록
+	if (imgDie->frame.x == 7)
+	{
+		col->visible = false;
+		col->colOnOff = false;
+
+		imgDie->visible = false;
+		imgDie->colOnOff = false;
+
+		//die -> idle 상태로 해서 visible만 false로 사망상태 유지
+		// 
+		//monsterState = MonsterState::IDLE;
+	}
+}
+
+

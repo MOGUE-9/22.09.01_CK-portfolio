@@ -35,7 +35,7 @@ Player::~Player()
 	SafeDelete(col);
 	SafeDelete(walk);
 	SafeDelete(action);
-}
+} 
 
 void Player::Update()
 {

@@ -43,7 +43,7 @@ Scene01::Scene01()
     map_LT->Load();
 
 
-    //map->CreateTileCost();
+    ////map->CreateTileCost();
     //
     //m.lock();
     //Sleep(1000);
@@ -65,7 +65,7 @@ Scene01::Scene01()
     //Sleep(1000);
     //loadingCount++;
     //m.unlock();
-    //
+    
 
     /*m.lock();
     Sleep(1000);
@@ -110,6 +110,7 @@ void Scene01::Release()
 void Scene01::Update()
 {
     //ImGui::SliderFloat2("Scale", (float*)&map->scale, 0.0f, 100.0f);
+
 
     if (INPUT->KeyDown('Q'))
     {
@@ -194,63 +195,12 @@ void Scene01::Update()
    }
 
    screenUI->SetItemType(bags->GetItemType());
-
-
-    //우클릭햇을때
-    //if (INPUT->KeyDown(VK_RBUTTON))
-    //{
-    //    //   출발점, 도착점
-    //    Int2 sour, dest;
-    //    //찾았는가?
-    //    bool isFind;
-    //
-    //    isFind = map->WorldPosToTileIdx(pl->GetPos(), sour);
-    //    isFind &= map->WorldPosToTileIdx(INPUT->GetMouseWorldPos(), dest);
-    //
-    //    //둘다 타일맵 위에있을때
-    //    if (isFind)
-    //    {
-    //        //길이 존재한다면
-    //        if (map->PathFinding(sour, dest, PlWay))
-    //        {
-    //            //길 사이즈만큼 반복
-    //            for (int i = 0; i < PlWay.size(); i++)
-    //            {
-    //                cout << "Way" << i << ":" << PlWay[i]->idx.x <<
-    //                    "," << PlWay[i]->idx.y << endl;
-    //            }
-    //            g = 0.0f;
-    //            PlSour = pl->GetPos();
-    //            PlWay.pop_back(); //출발지 빼기
-    //            PlDest = PlWay.back()->Pos;
-    //        }
-    //
-    //    }
-    //
-    //}
-    //
-    //가야될 길이 존재할 때
-    //if (!PlWay.empty())
-    //{
-    //    //PlSour = pl->GetPos();
-    //    pl->SetPos(Utility::Lerp(PlSour, PlDest, g));
-    //    g += DELTA * 3.0f;
-    //
-    //    //도착지를 지났을때
-    //    if (g > 1.0f)
-    //    {
-    //        g = 0.0f;
-    //        PlSour = PlDest;
-    //        PlWay.pop_back(); //맨뒷길 빼기
-    //        if (!PlWay.empty())
-    //            PlDest = PlWay.back()->Pos;
-    //    }
-    //}
+   mon->SetTarget(pl->GetPos());
+   boss->SetTarget(pl->GetPos());
 
     pl->Update();
     boss->Update();
 
-    mon->SetTarget(pl->GetPos());
     mon->Update();
 
     pickAxe->Update();
@@ -293,7 +243,7 @@ void Scene01::LateUpdate()
         torch->GetPlayer(pl->GetPos());
         torch->GetHiBox(pl->ReturnColBox());
 
-        torch->count--;
+        torch->count--;                             
     }
 
     //내가 몬스터 때렸을 때!!
@@ -302,12 +252,53 @@ void Scene01::LateUpdate()
         sword->attackCoolTime();
         mon->hp -= sword->att;
 
-        cout << mon->hp << endl;
+        //cout << "몹 체력 : " << mon->hp << endl;
+    }
+    //몬스터가 나 때렸을 때!!
+    if (mon->ReturnColBox()->Intersect(pl->ReturnColBox()))
+    {
+        mon->fightMod = true;
+
+        if (mon->getAttack)
+        {
+            pl->hp -= mon->att;
+            mon->fightMod = false;
+            mon->getAttack = false;
+            //cout << "p : " << pl->hp << endl;
+        }
+
+    }
+    else
+    {
+        mon->fightMod = false;
     }
 
-    //몬스터가 나 때렸을 때!!
+    //내가 보스 때렸을 때!!
+    if (sword->ReturnHitBox()->Intersect(boss->ReturnColBox()))
+    {
+        sword->attackCoolTime();
+        boss->hp -= sword->att;
 
+        cout << "몹 체력 : " << boss->hp << endl;
+    }
+    //보스가 나 때렸을 때!!
+    if (boss->ReturnColBox()->Intersect(pl->ReturnColBox()))
+    {
+        boss->fightMod = true;
 
+        if (mon->getAttack)
+        {
+            pl->hp -= mon->att;
+            boss->fightMod = false;
+            boss->getAttack = false;
+            //cout << "p : " << pl->hp << endl;
+        }
+
+    }
+    else
+    {
+        boss->fightMod = false;
+    }
 
     Int2 on;
     

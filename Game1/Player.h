@@ -18,8 +18,10 @@ private:
 	float		rollTime;
 
 	Vector2		lastPos;
-
 public:
+	int			hp{ 30 };
+
+private:
 	void Idle();
 	void Walk();
 	void Action();

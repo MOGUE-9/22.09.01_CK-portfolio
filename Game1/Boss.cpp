@@ -5,30 +5,31 @@ Boss::Boss()
 {
 	//보스본체 관련 이미지, col박스들
 	col = new ObRect();
-	col->scale = Vector2(0.0f, 0.0f);
+	col->scale = Vector2(100.0f, 100.0f);
+	col->SetWorldPos(Vector2(0.0f, -0.0f));
 	col->isFilled = false;
 
-	img->scale = Vector2(128.0f, 128.0f);
+	img->scale = Vector2(128.0f, 128.0f) * 1.5f;
 	img->SetParentRT(*col);
-	img->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
+	img->ChangeAnim(ANIMSTATE::LOOP, 0.15f);
 	img->maxFrame.x = 8;
 
-	imgAtt->scale = Vector2(128.0f, 128.0f);
+	imgAtt->scale = Vector2(128.0f, 128.0f) * 1.5f;
 	imgAtt->SetParentRT(*col);
-	imgAtt->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
-	imgAtt->maxFrame.x = 8;
+	imgAtt->ChangeAnim(ANIMSTATE::LOOP, 0.15f);
+	imgAtt->maxFrame.x = 6;
 	imgAtt->visible = false;
 
-	imgDie->scale = Vector2(128.0f, 128.0f);
+	imgDie->scale = Vector2(128.0f, 128.0f) * 1.5f;
 	imgDie->SetParentRT(*col);
-	imgDie->ChangeAnim(ANIMSTATE::LOOP, 0.2f);
+	imgDie->ChangeAnim(ANIMSTATE::LOOP, 0.15f);
 	imgDie->maxFrame.x = 8;
 	imgDie->visible = false;
 	
 	//감지범위
 	range[0] = new ObCircle();
 	range[0]->isFilled = false;
-	float scale = (float)BossState::LOOK * 2.0f;
+	float scale = (float)BossState::BACK * 2.0f;
 	range[0]->scale = Vector2(scale, scale);
 	range[0]->SetParentRT(*col);
 
@@ -63,6 +64,7 @@ void Boss::Update()
 	if (hp <= 0) //공격으로 인해 hp가 0이 됐을 경우
 	{
 		bossState = BossState::DIE;
+		Die();
 		//cout << "보스 사망" << endl;
 	}
 	else //체력이 0이 아닌 경우
@@ -78,8 +80,8 @@ void Boss::Update()
 			case BossState::IDLE: //가만히 있는 상태
 				Idle();
 				break;
-			case BossState::LOOK: // 무슨상태로 하지 . . . 
-				Look();
+			case BossState::BACK: // 무슨상태로 하지 . . . 
+				Back();
 				break;
 			case BossState::MOVE: //움직이면서 박치기(공격) 상태
 				Move();
@@ -91,6 +93,7 @@ void Boss::Update()
 		}
 	}
 
+	col->Update();
 	img->Update();
 	imgAtt->Update();
 	imgDie->Update();
@@ -102,6 +105,7 @@ void Boss::Update()
 
 void Boss::Render()
 {
+	col->Render();
 	img->Render();
 	imgAtt->Render();
 	imgDie->Render();
@@ -111,34 +115,94 @@ void Boss::Render()
 	}
 }
 
-void Boss::Idle()
+void Boss::Idle() //진짜 그냥 가만히 아무것도 X상태
 {
+	// idle -> move
+
+
+	if (distance < (float)BossState::MOVE)
+	{
+		bossState = BossState::MOVE;
+	}
 }
 
-void Boss::Look()
+void Boss::Back()
 {
+	//
+
+
+	// look 범위를 벗어나면 제자리로 돌아가도록 ??
+	// 원래 소환진 위로 이동하는 함수?로??
+
+
 }
 
-void Boss::Move()
+void Boss::Move() //이동하며 부딪혀서 공격
 {
+	img->visible = true;
+	imgAtt->visible = false;
+
+	if (dirState == 0 || dirState == 1 || dirState == 2)
+	{
+		target += Vector2(25.0f, 0.0f);
+	}
+	else if (dirState == 3 || dirState == 4 || dirState == 5)
+	{
+		target += Vector2(-10.0f, 0.0f);
+	}
+
+	moveDir = target - GetPos();
+	moveDir.Normalize();
+
+	col->MoveWorldPos(moveDir * 60.0f * DELTA);
+
+
+	//move -> idle
+	if (distance > (float)BossState::MOVE)
+	{
+		bossState = BossState::IDLE;
+	}
+
+	//씬01에서 fightmod 를 true로 변경하면 attack 모드로 바뀜
+	//move -> attack
+	if (fightMod)
+	{
+		bossState = BossState::ATTACK;
+	}
 }
 
-void Boss::Attack()
+void Boss::Attack() //점프뛰며 공격
 {
+	img->visible = false;
+	imgAtt->visible = true;
+
+	//애니메이션 재생 끝나면 대미지 들어가며 move로 돌아가기
+	if (imgAtt->frame.x == 5)
+	{
+		getAttack = true; // 이걸로 씬01에서 대미지 받도록 시간조절
+		bossState = BossState::MOVE;
+		imgAtt->frame.x = 0;
+	}
+
+	//attack -> move
+	if (distance > (float)BossState::ATTACK)
+	{
+		bossState = BossState::MOVE;
+	}
 }
 
 void Boss::Die()
 {
 	img->visible = false;
-	img->visible = false;
+	img->colOnOff = false;
 
 	imgAtt->visible = false;
-	imgAtt->visible = false;
+	imgAtt->colOnOff = false;
 
 	imgDie->visible = true;
-	imgDie->ChangeAnim(ANIMSTATE::ONCE, 0.2f);
+	imgDie->ChangeAnim(ANIMSTATE::LOOP, 0.15f);
 	
-	if (imgDie->frame.x == 8)
+	if (imgDie->frame.x == 7)
 	{
 		col->visible = false;
 		col->colOnOff = false;
@@ -147,168 +211,6 @@ void Boss::Die()
 		imgDie->colOnOff = false;
 
 		//die -> idle 상태로 해서 visible만 false로 사망상태 유지
-		bossState = BossState::IDLE;
+		//bossState = BossState::IDLE;
 	}
 }
-
-//
-//Monster::Monster()
-//{
-//	col = new ObRect();
-//	col->isFilled = false;
-//	col->scale = Vector2(128.0f, 127.0f);
-//
-//	img = new ObImage(L"boss.bmp");
-//	img->SetParentRT(*col);
-//	img->scale = Vector2(128.0f, 127.0f);
-//	img->maxFrame.y = 8;
-//
-//	//frameY[Dir_R] = 0;
-//	//frameY[Dir_L] = 1;
-//	//frameY[Dir_RB] = 2;
-//	//frameY[Dir_LT] = 3;
-//	//frameY[Dir_T] = 4;
-//	//frameY[Dir_B] = 5;
-//	//frameY[Dir_LB] = 6;
-//	//frameY[Dir_RT] = 7;
-//
-//	range[0] = new ObCircle();
-//	range[0]->isFilled = false;
-//	float scale = (float)MonsterState::LOOK * 2.0f;
-//	range[0]->scale = Vector2(scale, scale);
-//	range[0]->SetParentRT(*col);
-//
-//	range[1] = new ObCircle();
-//	range[1]->isFilled = false;
-//	scale = (float)MonsterState::MOVE * 2.0f;
-//	range[1]->scale = Vector2(scale, scale);
-//	range[1]->SetParentRT(*col);
-//
-//	range[2] = new ObCircle();
-//	range[2]->isFilled = false;
-//	scale = (float)MonsterState::ATTACK * 2.0f;
-//	range[2]->scale = Vector2(scale, scale);
-//	range[2]->SetParentRT(*col);
-//
-//	monsterState = MonsterState::IDLE;
-//}
-//
-//Monster::~Monster()
-//{
-//	SafeDelete(col);
-//	SafeDelete(img);
-//	SafeDelete(range[0]);
-//	SafeDelete(range[1]);
-//	SafeDelete(range[2]);
-//}
-//
-//void Monster::Update()
-//{
-//	Vector2 dis = target - GetPos();
-//	distance = dis.Length();
-//
-//	switch (monsterState)
-//	{
-//	case MonsterState::IDLE:
-//		Idle();
-//		break;
-//	case  MonsterState::LOOK:
-//		Look();
-//		break;
-//	case  MonsterState::MOVE:
-//		Move();
-//		break;
-//	case  MonsterState::ATTACK:
-//		Attack();
-//		break;
-//	}
-//
-//	col->Update();
-//	img->Update();
-//	range[0]->Update();
-//	range[1]->Update();
-//	range[2]->Update();
-//}
-//
-//void Monster::Render()
-//{
-//	col->Render();
-//	img->Render();
-//	range[0]->Render();
-//	range[1]->Render();
-//	range[2]->Render();
-//}
-//
-//void Monster::Idle()
-//{
-//	//idle -> look
-//	if (distance < (float)MonsterState::LOOK)
-//	{
-//		monsterState = MonsterState::LOOK;
-//	}
-//}
-//
-//void Monster::Look()
-//{
-//	LookTarget(target, img);
-//
-//	//look -> idle
-//	if (distance > (float)MonsterState::LOOK)
-//	{
-//		monsterState = MonsterState::IDLE;
-//	}
-//
-//	//look -> move
-//	if (distance < (float)MonsterState::MOVE)
-//	{
-//		monsterState = MonsterState::MOVE;
-//	}
-//}
-//
-//void Monster::Move()
-//{
-//	LookTarget(target, img);
-//
-//	moveDir = target - GetPos();
-//	moveDir.Normalize();
-//
-//	col->MoveWorldPos(moveDir * 100.0f * DELTA);
-//
-//	//move -> look
-//	if (distance > (float)MonsterState::MOVE)
-//	{
-//		monsterState = MonsterState::LOOK;
-//	}
-//
-//	//move -> attack
-//	if (distance < (float)MonsterState::ATTACK)
-//	{
-//		monsterState = MonsterState::ATTACK;
-//		scaleSwitching = true;
-//	}
-//}
-//
-//void Monster::Attack()
-//{
-//	LookTarget(target, img);
-//
-//	float plus;
-//	if (scaleSwitching) plus = 1.0f;
-//	else plus = -1.0f;
-//
-//	img->scale.x += plus * 200.0f * DELTA;
-//	img->scale.y -= plus * 200.0f * DELTA;
-//
-//	if (img->scale.x < 50.0f || img->scale.y < 50.0f)
-//	{
-//		scaleSwitching = !scaleSwitching;
-//	}
-//
-//	//attack -> move
-//	if (distance > (float)MonsterState::ATTACK)
-//	{
-//		monsterState = MonsterState::MOVE;
-//		img->scale.x = 128.0f;
-//		img->scale.y = 127.0f;
-//	}
-//}
