@@ -23,6 +23,7 @@ private:
 
 	ObTileMap*	map_RT; //생성위치 기준 우상
 	ObTileMap*	map_LT; //생성위치 기준 좌상
+	ObTileMap*	map_B; //생성위치 기준 아래
 
 
 	MainCore*	mainBuild;

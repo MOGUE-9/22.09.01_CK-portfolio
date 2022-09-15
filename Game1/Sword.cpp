@@ -21,6 +21,8 @@ Sword::Sword()
 	img->maxFrame = Int2(7, 1);
 	img->SetParentRT(*col);
 
+	SOUND->AddSound("Sword.mp3", "Sword", false);
+
 	swordState = SwordState::IDLE;
 }
 
@@ -70,6 +72,9 @@ void Sword::Idle()
 	{
 		if (INPUT->KeyPress(VK_LBUTTON))
 		{
+			SOUND->Stop("Sword");
+			SOUND->Play("Sword");
+
 			swordState = SwordState::ATTACK;
 			float time = 4.0f / 70.0f;
 			img->ChangeAnim(ANIMSTATE::LOOP, time);
@@ -86,6 +91,8 @@ void Sword::Attack()
 	//attackTime += DELTA;
 
 	//cout << mDirState << endl;
+	//SOUND->Stop("Sword");
+	//SOUND->Play("Sword");
 
 	if (mDirState == mDir_L)
 	{
@@ -133,6 +140,7 @@ void Sword::Attack()
 
 	if (!hitBox->colOnOff)
 	{
+
 		// Scene01 에서 때린 뒤 colOnoff = false가 됨, 이후 false면 들어와서 0.7초 후에 true로 변경시킴
 		if (TIMER->GetTick(attackTime, 0.7f))
 		{

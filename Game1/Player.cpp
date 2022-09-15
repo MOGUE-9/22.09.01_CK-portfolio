@@ -6,7 +6,20 @@ Player::Player()
 	//col->SetWorldPos(Vector2(-500.0f, -200.0f));
 	col->SetWorldPos(Vector2());
 	col->scale = Vector2(26.0f, 36.0f);
+	col->color = Color(0.0f, 0.0f, 0.0f, 0.0f);
 	col->isFilled = false;
+	
+	hpBox->SetParentRT(*col);
+	hpBox->scale = Vector2(30.0f ,3.0f);
+	hpBox->SetWorldPos(Vector2(-15.0f, 23.0f));
+	hpBox->isFilled = false;
+	hpBox->pivot = OFFSET_L;
+
+	hpBar->SetParentRT(*col);
+	hpBar->scale = Vector2(30.0f, 3.0f);
+	hpBar->SetWorldPos(Vector2(-15.0f, 23.0f));
+	hpBar->pivot = OFFSET_L;
+
 
 	walk = new ObImage(L"IdleWalk.png");
 	walk->scale = Vector2(46.0f, 46.0f);
@@ -39,7 +52,13 @@ Player::~Player()
 
 void Player::Update()
 {
+	LIGHT->light.select = 1.0f;
+	LIGHT->SetLightPos(col->GetWorldPos());
+
 	lastPos = col->GetWorldPos();
+
+	hpBar->scale.x = hp;
+	hpBar->scale.x = Utility::Saturate(hpBar->scale.x, 0.0f, 30.0f);
 
 	switch (plState)
 	{
@@ -57,6 +76,8 @@ void Player::Update()
 	col->Update();
 	walk->Update();
 	action->Update();
+	hpBox->Update();
+	hpBar->Update();
 }
 
 void Player::Render()
@@ -64,6 +85,9 @@ void Player::Render()
 	col->Render();
 	walk->Render();
 	action->Render();
+
+	hpBox->Render();
+	hpBar->Render();
 }
 
 void Player::StepBack()

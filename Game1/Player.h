@@ -10,6 +10,10 @@ enum class PlayerState
 class Player : public Character
 {
 private:
+
+	ObRect*		hpBox = new ObRect();
+	ObImage*	hpBar = new ObImage(L"HPbar.png");
+
 	ObImage*	walk;
 	ObImage*	action;
 

@@ -1,6 +1,5 @@
 #include "stdafx.h"
 
-
 Boss::Boss()
 {
 	//보스 소환진 (기본 위치)
@@ -53,6 +52,9 @@ Boss::Boss()
 	range[2]->scale = Vector2(scale, scale);
 	range[2]->SetParentRT(*col);
 
+	SOUND->AddSound("slimeBossDeath.mp3", "bossDeath", false);
+	SOUND->AddSound("slimeBossHurt.mp3", "bossHurt", false);
+
 	bossState = BossState::IDLE;
 }
 
@@ -69,48 +71,63 @@ Boss::~Boss()
 
 void Boss::Update()
 {
-	if (hp <= 0) //공격으로 인해 hp가 0이 됐을 경우
+	Vector2 dis = target - GetPos();
+	distance = dis.Length();
+	//cout << distance << endl;
+
+	if (hp > 0) //공격으로 인해 hp가 0이 됐을 경우
+	{
+		/*if (!isFind) *///설정한 이유: scene01의 update에서 게속해서 target위치를 불러오기 때문에
+		// 설정하지 않으면 범위에 없어도?? 나한테 오는듯함 ? 아닌가? 해제해봄
+
+		switch (bossState)
+		{
+		case BossState::IDLE: //가만히 있는 상태
+			Idle();
+			break;
+		case BossState::BACK: // 무슨상태로 하지 . . . 
+			Back();
+			break;
+		case BossState::MOVE: //움직이면서 박치기(공격) 상태
+			Move();
+			break;
+		case BossState::ATTACK: //점프하면서 때리는 상태
+			Attack();
+			break;
+		}
+
+	}
+	else //체력이 0이 아닌 경우
 	{
 		bossState = BossState::DIE;
 		Die();
 		//cout << "보스 사망" << endl;
+		
 	}
-	else //체력이 0이 아닌 경우
-	{
-		/*if (!isFind) *///설정한 이유: scene01의 update에서 게속해서 target위치를 불러오기 때문에
-				// 설정하지 않으면 범위에 없어도?? 나한테 오는듯함 ? 아닌가? 해제해봄
-		{
-			Vector2 dis = target - GetPos();
-			distance = dis.Length();
 
-			switch (bossState)
-			{
-			case BossState::IDLE: //가만히 있는 상태
-				Idle();
-				break;
-			case BossState::BACK: // 무슨상태로 하지 . . . 
-				Back();
-				break;
-			case BossState::MOVE: //움직이면서 박치기(공격) 상태
-				Move();
-				break;
-			case BossState::ATTACK: //점프하면서 때리는 상태
-				Attack();
-				break;
-			}
-		}
+	if (getHited)
+	{
+		SOUND->Stop("bossHurt");
+		SOUND->Play("bossHurt");
+		getHited = false;
 	}
 	
+	if (bossState == BossState::DIE && !isDie)
+	{
+		SOUND->Play("bossDeath");
+		isDie = true;
+	}
+
 	colRune->Update();
 	imgRune->Update();
 	col->Update();
 	img->Update();
 	imgAtt->Update();
 	imgDie->Update();
-	for (int i = 0; i < 3; i++)
-	{
-		range[i]->Update();
-	}
+
+	range[0]->Update();
+	range[1]->Update();
+	range[2]->Update();
 }
 
 void Boss::Render()
@@ -121,15 +138,15 @@ void Boss::Render()
 	img->Render();
 	imgAtt->Render();
 	imgDie->Render();
-	for (int i = 0; i < 3; i++)
-	{
-		range[i]->Render();
-	}
+	range[0]->Render();
+	range[1]->Render();
+	range[2]->Render();
 }
 
 void Boss::Idle() //진짜 그냥 가만히 아무것도 X상태
 {
-	cout << "idle" << endl;
+	//cout << "idle" << endl;
+	//cout << distance << endl;
 
 	img->visible = true;
 	imgAtt->visible = false;
@@ -139,38 +156,33 @@ void Boss::Idle() //진짜 그냥 가만히 아무것도 X상태
 	//{
 	//	bossState = BossState::MOVE;
 	//}
-
-
-	 //idle -> back :: 복귀상태
-	/*if (distance < (float)BossState::BACK)
+	
+	//idle -> back :: 복귀상태
+	if (distance < (float)BossState::BACK)
 	{
 		bossState = BossState::BACK;
-	}*/
+	}
 }
 
 void Boss::Back()
 {
-	cout << "back" << endl;
+	//cout << "back" << endl;
 
-	if (!isOnRune)
-	{
-		// look 범위를 벗어나면 제자리로 돌아가도록 ??
-		// 원래 소환진 위로 이동하는 함수?로??
-		moveDir = firstPlace - GetPos();
-		moveDir.Normalize();
-		col->MoveWorldPos(moveDir * 60.0f * DELTA);
-		//cout << col->GetWorldPos().x << endl;
+	// look 범위를 벗어나면 제자리로 돌아가도록 ??
+	// 원래 소환진 위로 이동하는 함수?로??
+	moveDir = firstPlace - GetPos();
+	moveDir.Normalize();
+	col->MoveWorldPos(moveDir * 60.0f * DELTA);
+	//cout << col->GetWorldPos().x << endl;
 
-		if (colRune->IntersectScreenMouse(col->GetWorldPos()))
-		{
-			col->SetWorldPos(firstPlace);
-			cout << "D?" << endl;
-			isOnRune = true;
-		}
-	}
+	//if (colRune->Intersect(col)))
+	//{
+	//	col->SetWorldPos(firstPlace);
+	//	//isOnRune = true;
+	//}
 
 	//back -> idle
-	if (distance > (float)BossState::BACK && isOnRune)
+	if (distance > (float)BossState::BACK)
 	{
 		bossState = BossState::IDLE;
 	}
@@ -184,7 +196,7 @@ void Boss::Back()
 
 void Boss::Move() //이동하며 부딪혀서 공격
 {
-	cout << "move" << endl;
+	//cout << "move" << endl;
 
 	img->visible = true;
 	imgAtt->visible = false;
@@ -220,7 +232,7 @@ void Boss::Move() //이동하며 부딪혀서 공격
 
 void Boss::Attack() //점프뛰며 공격
 {
-	cout << "attack" << endl;
+	//cout << "attack" << endl;
 
 	img->visible = false;
 	imgAtt->visible = true;
@@ -242,7 +254,7 @@ void Boss::Attack() //점프뛰며 공격
 
 void Boss::Die()
 {
-	cout << "die" << endl;
+	//cout << "die" << endl;
 
 	img->visible = false;
 	img->colOnOff = false;
@@ -260,8 +272,5 @@ void Boss::Die()
 
 		imgDie->visible = false;
 		imgDie->colOnOff = false;
-
-		//die -> idle 상태로 해서 visible만 false로 사망상태 유지
-		//bossState = BossState::IDLE;
 	}
 }

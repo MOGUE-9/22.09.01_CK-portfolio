@@ -32,13 +32,16 @@ private:
 
 	// vvv이거 셋중에 몇개는 사라지고 통합시켜도 될듯함??
 	bool		isFind{ false }; //플레이어가 범위안에 들어왔는지 체크
+	bool		isDie{ false }; //죽는 효과음 플레이 하려고 만들었음
 
 public:
+	bool		getHited{ false }; //맞는 효과음
+
 	bool		getAttack{ false }; //이건 맞았을 때 hp관리 용 bool값
 	bool		fightMod; //전투모드 비전투모드 확인 - 플레이어가 가까이에 들어옴 - 전투면 hp보임, 비전투면 안보임
 
-	int			hp{ 100 }; //보스 hp
-	int			att{ 15 }; //보스 공격력
+	int			hp{ 30 }; //보스 hp
+	int			att{ 8 }; //보스 공격력
 
 public:
 	Boss();

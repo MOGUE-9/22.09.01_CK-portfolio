@@ -20,6 +20,12 @@ void CreateScene()
 
 LoadingScene::LoadingScene()
 {
+	LIGHT->light.radius = 2000.0f;
+
+	logo = new ObImage(L"TitleText.png");
+	logo->scale = Vector2(238.0f, 103.0f) * 1.5f;
+	logo->SetWorldPosX(-app.GetHalfWidth() * 0.5f);
+
 	bg = new ObImage(L"Title.png");
 	bg->maxFrame.x = 4;
 	bg->scale = Vector2(app.GetWidth(), app.GetHeight());
@@ -30,6 +36,8 @@ LoadingScene::LoadingScene()
 	rc->pivot = OFFSET_L;
 	rc->isFilled = false;
 	rc->SetWorldPosX(-app.GetHalfWidth());
+
+	SOUND->AddSound("Loading.mp3", "loading", false);
 
 	t1 = new thread(CreateScene);
 }
@@ -50,13 +58,21 @@ void LoadingScene::Release()
 
 void LoadingScene::Update()
 {
-	rc->scale.x = loadingCount * app.GetWidth() / 5.0f;
+	//rc->scale.x = loadingCount * app.GetWidth() / 5.0f;
+
+	//col->MoveWorldPos(moveDir * 500.0f *
+	//	cosf(rollTime / 0.6f * DIV2PI) * DELTA);
+
+	logo->color.A(sinf(loadingCount / 5.0f * DIV4PI));
+
+	SOUND->Play("loading");
 
 	if (loadingCount == 5)
 	{
 		SCENE->ChangeScene("Scene01");
 	}
 
+	logo->Update();
 	bg->Update();
 	rc->Update();
 }
@@ -68,7 +84,9 @@ void LoadingScene::LateUpdate()
 void LoadingScene::Render()
 {
 	bg->Render();
-	rc->Render();
+	logo->Render();
+
+	//rc->Render();
 }
 
 void LoadingScene::ResizeScreen()

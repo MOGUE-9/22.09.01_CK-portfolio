@@ -2,7 +2,6 @@
 
 Scene01::Scene01()
 {
-    LIGHT->light.radius = 2000.0f;
     pl = new Player();
     mon = new Monster();
     boss = new Boss();
@@ -42,6 +41,12 @@ Scene01::Scene01()
     map_LT->file = "map2.txt";
     map_LT->Load();
 
+    map_B = new ObTileMap();
+    map_B->file = "map3.txt";
+    map_B->Load();
+
+    mon->SetTarget(pl->GetPos());
+    boss->SetTarget(pl->GetPos());
 
     //map->CreateTileCost();
     
@@ -66,6 +71,11 @@ Scene01::Scene01()
     loadingCount++;
     m.unlock();
     
+    SOUND->AddSound("Title.mp3", "title", true);
+
+    LIGHT->light.radius = 500.0f;
+
+
     /*m.lock();
     Sleep(1000);
     loadingCount++;
@@ -108,6 +118,8 @@ void Scene01::Release()
 void Scene01::Update()
 {
     //ImGui::SliderFloat2("Scale", (float*)&map->scale, 0.0f, 100.0f);
+
+    SOUND->Play("title");
 
 
     if (INPUT->KeyDown('Q'))
@@ -192,14 +204,18 @@ void Scene01::Update()
        }
    }
 
+
    screenUI->SetItemType(bags->GetItemType());
-   mon->SetTarget(pl->GetPos());
-   boss->SetTarget(pl->GetPos());
+
+
 
    pl->Update();
+   mon->SetTarget(pl->GetPos());
+   mon->Update();
+
+   boss->SetTarget(pl->GetPos());
    boss->Update();
 
-   mon->Update();
 
    pickAxe->Update();
    sword->Update();
@@ -218,6 +234,7 @@ void Scene01::Update()
 
    map_RT->Update();
    map_LT->Update();
+   map_B->Update();
 
    mainBuild->Update();
 
@@ -227,7 +244,16 @@ void Scene01::Update()
 void Scene01::LateUpdate()
 {
     //INPUT->GetMouseWorldPos()
+    Vector2 plpos;
 
+    plpos.x = Utility::Saturate(pl->GetPos().x, -710.0f, 710.0f);
+    plpos.y = Utility::Saturate(pl->GetPos().y, -2000.0f, 500.0f);
+
+
+    pl->SetPos(plpos);
+
+    CAM->position.y = Utility::Saturate(CAM->position.y, -1440.0f, 260.0f);
+    CAM->position.x = Utility::Saturate(CAM->position.x, 0.0f, 0.0f);
 
     //if (torch->isInterSect(sword->ReturnHitBox()))
     //{
@@ -248,8 +274,8 @@ void Scene01::LateUpdate()
     if (sword->ReturnHitBox()->Intersect(mon->ReturnColBox()))
     {
         sword->attackCoolTime();
+        mon->getHited = true;
         mon->hp -= sword->att;
-
         //cout << "몹 체력 : " << mon->hp << endl;
     }
     //몬스터가 나 때렸을 때!!
@@ -261,10 +287,10 @@ void Scene01::LateUpdate()
         {
             pl->hp -= mon->att;
             mon->fightMod = false;
-            mon->getAttack = false;
+            mon->getAttack = false; //때리는 타이밍!! 관리
+
             //cout << "p : " << pl->hp << endl;
         }
-
     }
     else
     {
@@ -275,20 +301,22 @@ void Scene01::LateUpdate()
     if (sword->ReturnHitBox()->Intersect(boss->ReturnColBox()))
     {
         sword->attackCoolTime();
+        boss->getHited = true;
         boss->hp -= sword->att;
 
-        cout << "몹 체력 : " << boss->hp << endl;
+        //cout << "몹 체력 : " << boss->hp << endl;
     }
     //보스가 나 때렸을 때!!
     if (boss->ReturnColBox()->Intersect(pl->ReturnColBox()))
     {
         boss->fightMod = true;
 
-        if (mon->getAttack)
+        if (boss->getAttack)
         {
-            pl->hp -= mon->att;
+            pl->hp -= boss->att;
             boss->fightMod = false;
             boss->getAttack = false;
+
             //cout << "p : " << pl->hp << endl;
         }
 
@@ -304,7 +332,6 @@ void Scene01::LateUpdate()
     {
         ImGui::Text("TileState %d", map_RT->GetTileState(on));
         ImGui::Text("TileState %d", map_LT->GetTileState(on));
-
     }
     
     vector<Vector2>& Foot = pl->GetFoot();
@@ -337,7 +364,7 @@ void Scene01::Render()
     //DWRITE->RenderText(L"안녕\n안녕", RECT{ 300,100,(long)app.GetWidth(),(long)app.GetHalfHeight() },
     //    30.0f, L"휴먼매직체", Color(1, 0, 0, 1), DWRITE_FONT_WEIGHT_BOLD);
 
-
+    map_B->Render();
     map_RT->Render();
     map_LT->Render();
     mainBuild->Render();
@@ -349,7 +376,7 @@ void Scene01::Render()
     {
         pickAxe->Render();
         sword->Render();
-        torch->Render();
+        //torch->Render();
         pl->Render();
     }
     else
@@ -357,9 +384,8 @@ void Scene01::Render()
         pl->Render();
         pickAxe->Render();
         sword->Render();
-        torch->Render();
+        //torch->Render();
     }
-
 
 
 

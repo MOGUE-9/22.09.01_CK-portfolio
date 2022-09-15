@@ -4,7 +4,7 @@ Monster::Monster()
 {
 	col = new ObRect();
 	col->isFilled = false;
-	col->SetWorldPos(Vector2(100.0f, -160.0f));
+	col->SetWorldPos(Vector2(200.0f, -360.0f));
 	col->scale = Vector2(28.0f, 28.0f);
 	col->color = Color(1.0f, 0.0f, 0.0f, 1.0f);
 
@@ -51,6 +51,9 @@ Monster::Monster()
 	range[2]->scale = Vector2(scale, scale);
 	range[2]->SetParentRT(*col);
 
+	SOUND->AddSound("slimeDeath.mp3", "slimeDeath", false);
+	SOUND->AddSound("slimeHurt.mp3", "slimeHurt", false);
+
 	monsterState = MonsterState::IDLE;
 	hp = 20;
 }
@@ -78,31 +81,35 @@ void Monster::Update()
 	}
 	else
 	{
-		//if (!isFind) //설정한 이유: scene01의 update에서 게속해서 target위치를 불러오기 때문에
-						// 설정하지 않으면 범위에 없어도?? 나한테 오는듯함 ? 아닌가? 해제해봄
-		//{
-			Vector2 dis = target - GetPos();
-			distance = dis.Length();
+		Vector2 dis = target - GetPos();
+		distance = dis.Length();
 
 
-			switch (monsterState)
-			{
-			case MonsterState::IDLE:
-				Idle();
-				break;
-			case  MonsterState::LOOK:
-				Look();
-				break;
-			case  MonsterState::MOVE:
-				Move();
-				break;
-			case  MonsterState::ATTACK:
-				Attack();
-				break;
-			}
-		//}
+		switch (monsterState)
+		{
+		case MonsterState::IDLE:
+			Idle();
+			break;
+		case  MonsterState::LOOK:
+			Look();
+			break;
+		case  MonsterState::MOVE:
+			Move();
+			break;
+		case  MonsterState::ATTACK:
+			Attack();
+			break;
+		}
 	}
 	
+	if (getHited)
+	{
+		SOUND->Stop("slimeHurt");
+		SOUND->Play("slimeHurt");
+		getHited = false;
+	}
+
+
 	col->Update();
 	img->Update();
 	imgAtt->Update();
@@ -125,7 +132,6 @@ void Monster::Render()
 
 void Monster::Idle()
 {
-
 	col->MoveWorldPos(freeMov * 30.0f * DELTA);
 
 	if (TIMER->GetTick(moveTimer, 2.0f))
@@ -157,6 +163,11 @@ void Monster::Idle()
 			freeMov.y = 0.0f;
 			break;
 		}
+	}
+
+	if (true)
+	{
+
 	}
 
 	//idle -> look
@@ -312,9 +323,6 @@ int Monster::SetHp()
 	return playerHP;
 }
 
-
-
-
 void Monster::Die()
 {
 	col->visible = false;
@@ -329,18 +337,19 @@ void Monster::Die()
 	imgDie->visible = true;
 	imgDie->ChangeAnim(ANIMSTATE::LOOP, 0.15f);
 
+	if (imgDie->frame.x == 0) SOUND->Play("slimeDeath");
+	if (imgDie->frame.x > 2) SOUND->Stop("slimeDeath");
+
 	//마지막 프레임에 도달하면 소멸되도록
 	if (imgDie->frame.x == 7)
 	{
+
 		col->visible = false;
 		col->colOnOff = false;
 
 		imgDie->visible = false;
 		imgDie->colOnOff = false;
 
-		//die -> idle 상태로 해서 visible만 false로 사망상태 유지
-		// 
-		//monsterState = MonsterState::IDLE;
 	}
 }
 

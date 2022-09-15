@@ -3,6 +3,7 @@
 class LoadingScene : public Scene
 {
 public:
+	ObImage* logo;
 	ObImage* bg;
 	ObRect* rc;
 	thread* t1;

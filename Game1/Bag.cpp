@@ -153,6 +153,7 @@ void Bag::Update()
 			hotbar[x]->img->visible = !hotbar[x]->img->visible;
 		}
 
+		selectBox->img->visible = !selectBox->img->visible;
 		bagBG->visible = !bagBG->visible;
 
 		for (int y = 0; y < bagY; y++)

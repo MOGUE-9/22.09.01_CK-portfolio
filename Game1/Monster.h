@@ -42,6 +42,7 @@ public:
 	bool			getHit{ false }; //몸박공격
 	bool			getJump{ false }; //점프공격
 
+	bool			getHited{ false }; //맞는사운드용
 	bool			getAttack{ false }; //체력감소 타이밍 확인용 .. 타이머? 같은거
 
 private:
