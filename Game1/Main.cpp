@@ -4,19 +4,19 @@
 void Main::Init()
 {
 	//익명 스코프
- 	{
-	Scene01* temp = new Scene01();
-	SCENE->AddScene("Scene01", temp);
-	}
-
-	SCENE->ChangeScene("Scene01");
-
-	//{
-	//	LoadingScene* temp = new LoadingScene();
-	//	SCENE->AddScene("Loading", temp);
+ //	{
+	//Scene01* temp = new Scene01();
+	//SCENE->AddScene("Scene01", temp);
 	//}
 
-	//SCENE->ChangeScene("Loading");
+	//SCENE->ChangeScene("Scene01");
+
+	{
+		LoadingScene* temp = new LoadingScene();
+		SCENE->AddScene("Loading", temp);
+	}
+
+	SCENE->ChangeScene("Loading");
 }
 
 void Main::Release()

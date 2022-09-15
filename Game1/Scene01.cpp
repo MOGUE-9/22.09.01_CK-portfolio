@@ -43,30 +43,29 @@ Scene01::Scene01()
     map_LT->Load();
 
 
-    ////map->CreateTileCost();
-    //
-    //m.lock();
-    //Sleep(1000);
-    //loadingCount++;
-    //m.unlock();
-    //m.lock();
-    //Sleep(1000);
-    //loadingCount++;
-    //m.unlock();
-    //m.lock();
-    //Sleep(1000);
-    //loadingCount++;
-    //m.unlock();
-    //m.lock();
-    //Sleep(1000);
-    //loadingCount++;
-    //m.unlock();
-    //m.lock();
-    //Sleep(1000);
-    //loadingCount++;
-    //m.unlock();
+    //map->CreateTileCost();
     
-
+    m.lock();
+    Sleep(1000);
+    loadingCount++;
+    m.unlock();
+    m.lock();
+    Sleep(1000);
+    loadingCount++;
+    m.unlock();
+    m.lock();
+    Sleep(1000);
+    loadingCount++;
+    m.unlock();
+    m.lock();
+    Sleep(1000);
+    loadingCount++;
+    m.unlock();
+    m.lock();
+    Sleep(1000);
+    loadingCount++;
+    m.unlock();
+    
     /*m.lock();
     Sleep(1000);
     loadingCount++;
@@ -83,7 +82,6 @@ Scene01::Scene01()
     Sleep(1000);
     loadingCount++;
     m.unlock();
-    
     m.lock();
     Sleep(1000);
     loadingCount++;
@@ -198,32 +196,32 @@ void Scene01::Update()
    mon->SetTarget(pl->GetPos());
    boss->SetTarget(pl->GetPos());
 
-    pl->Update();
-    boss->Update();
+   pl->Update();
+   boss->Update();
 
-    mon->Update();
+   mon->Update();
 
-    pickAxe->Update();
-    sword->Update();
-    torch->Update();
+   pickAxe->Update();
+   sword->Update();
+   torch->Update();
 
-    bags->Update();
-    screenUI->Update();
+   bags->Update();
+   screenUI->Update();
 
-    for (int y = 0; y < bagY; y++)
-    {
-        for (int x = 0; x < bagX; x++)
-        {
-            icons[x][y]->Update();
-        }
-    }
+   for (int y = 0; y < bagY; y++)
+   {
+       for (int x = 0; x < bagX; x++)
+       {
+           icons[x][y]->Update();
+       }
+   }
 
-    map_RT->Update();
-    map_LT->Update();
+   map_RT->Update();
+   map_LT->Update();
 
-    mainBuild->Update();
+   mainBuild->Update();
 
-    CAM->position = pl->GetPos();
+   CAM->position = pl->GetPos();
 }
 
 void Scene01::LateUpdate()

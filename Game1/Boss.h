@@ -12,6 +12,10 @@ enum class BossState
 class Boss : public Character
 {
 private:
+	ObRect*	colRune = new ObRect();
+	ObImage*	imgRune = new ObImage(L"BossRune.png"); //바닥 소환진
+	bool		isOnRune{ false }; //룬 위에 올라서면 true로 변경시켜서 idle상태로 만들기
+	
 	ObImage*	img = new ObImage(L"Boss.png"); //기본 이미지
 	ObImage*	imgAtt = new ObImage(L"BossAtt.png"); //공격 이미지
 	ObImage*	imgDie = new ObImage(L"MiniDie.png"); //사망 이미지
@@ -19,6 +23,8 @@ private:
 	BossState	bossState; //현재상태
 	ObCircle*	range[3];
 	float		distance;
+
+	Vector2		firstPlace{ 0.0f, -1000.0f };
 
 	float		moveSpeed; //보스 이동속도
 
@@ -31,7 +37,7 @@ public:
 	bool		getAttack{ false }; //이건 맞았을 때 hp관리 용 bool값
 	bool		fightMod; //전투모드 비전투모드 확인 - 플레이어가 가까이에 들어옴 - 전투면 hp보임, 비전투면 안보임
 
-	int			hp{ 10 }; //보스 hp
+	int			hp{ 100 }; //보스 hp
 	int			att{ 15 }; //보스 공격력
 
 public:

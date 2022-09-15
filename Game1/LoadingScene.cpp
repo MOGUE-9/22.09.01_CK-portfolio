@@ -11,10 +11,10 @@ void CreateScene()
 		Scene01* temp = new Scene01();
 		SCENE->AddScene("Scene01", temp);
 
-		/*m.lock();
-		Sleep(1000);
-		loadingCount += 2;
-		m.unlock();*/
+		//m.lock();
+		//Sleep(1000);
+		//loadingCount += 2;
+		//m.unlock();
 	}
 }
 
@@ -22,8 +22,8 @@ LoadingScene::LoadingScene()
 {
 	bg = new ObImage(L"Title.png");
 	bg->maxFrame.x = 4;
-	bg->ChangeAnim(ANIMSTATE::LOOP, 0.1f);
 	bg->scale = Vector2(app.GetWidth(), app.GetHeight());
+	bg->ChangeAnim(ANIMSTATE::LOOP, 0.15f);
 
 	rc = new ObRect();
 	rc->scale = Vector2(200.0f, 100.0f);

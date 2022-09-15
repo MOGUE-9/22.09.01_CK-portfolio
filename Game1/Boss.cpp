@@ -3,10 +3,18 @@
 
 Boss::Boss()
 {
+	//보스 소환진 (기본 위치)
+	colRune->scale = Vector2(46.0f, 46.0f);
+	colRune->isFilled = false;
+	colRune->SetWorldPos(Vector2(0.0f, -1000.0f));
+
+	imgRune->scale = Vector2(46.0f, 46.0f) * 1.5f;
+	imgRune->SetParentRT(*colRune);
+
 	//보스본체 관련 이미지, col박스들
 	col = new ObRect();
 	col->scale = Vector2(100.0f, 100.0f);
-	col->SetWorldPos(Vector2(0.0f, -0.0f));
+	col->SetWorldPos(Vector2(0.0f, -1000.0f));
 	col->isFilled = false;
 
 	img->scale = Vector2(128.0f, 128.0f) * 1.5f;
@@ -20,7 +28,7 @@ Boss::Boss()
 	imgAtt->maxFrame.x = 6;
 	imgAtt->visible = false;
 
-	imgDie->scale = Vector2(128.0f, 128.0f) * 1.5f;
+	imgDie->scale = Vector2(128.0f, 128.0f) * 0.8f;
 	imgDie->SetParentRT(*col);
 	imgDie->ChangeAnim(ANIMSTATE::LOOP, 0.15f);
 	imgDie->maxFrame.x = 8;
@@ -69,7 +77,7 @@ void Boss::Update()
 	}
 	else //체력이 0이 아닌 경우
 	{
-		if (!isFind) //설정한 이유: scene01의 update에서 게속해서 target위치를 불러오기 때문에
+		/*if (!isFind) *///설정한 이유: scene01의 update에서 게속해서 target위치를 불러오기 때문에
 				// 설정하지 않으면 범위에 없어도?? 나한테 오는듯함 ? 아닌가? 해제해봄
 		{
 			Vector2 dis = target - GetPos();
@@ -92,7 +100,9 @@ void Boss::Update()
 			}
 		}
 	}
-
+	
+	colRune->Update();
+	imgRune->Update();
 	col->Update();
 	img->Update();
 	imgAtt->Update();
@@ -105,6 +115,8 @@ void Boss::Update()
 
 void Boss::Render()
 {
+	colRune->Render();
+	imgRune->Render();
 	col->Render();
 	img->Render();
 	imgAtt->Render();
@@ -117,28 +129,63 @@ void Boss::Render()
 
 void Boss::Idle() //진짜 그냥 가만히 아무것도 X상태
 {
-	// idle -> move
+	cout << "idle" << endl;
+
+	img->visible = true;
+	imgAtt->visible = false;
+
+	//// idle -> move
+	//if (distance < (float)BossState::MOVE)
+	//{
+	//	bossState = BossState::MOVE;
+	//}
 
 
+	 //idle -> back :: 복귀상태
+	/*if (distance < (float)BossState::BACK)
+	{
+		bossState = BossState::BACK;
+	}*/
+}
+
+void Boss::Back()
+{
+	cout << "back" << endl;
+
+	if (!isOnRune)
+	{
+		// look 범위를 벗어나면 제자리로 돌아가도록 ??
+		// 원래 소환진 위로 이동하는 함수?로??
+		moveDir = firstPlace - GetPos();
+		moveDir.Normalize();
+		col->MoveWorldPos(moveDir * 60.0f * DELTA);
+		//cout << col->GetWorldPos().x << endl;
+
+		if (colRune->IntersectScreenMouse(col->GetWorldPos()))
+		{
+			col->SetWorldPos(firstPlace);
+			cout << "D?" << endl;
+			isOnRune = true;
+		}
+	}
+
+	//back -> idle
+	if (distance > (float)BossState::BACK && isOnRune)
+	{
+		bossState = BossState::IDLE;
+	}
+	
+	//back -> move
 	if (distance < (float)BossState::MOVE)
 	{
 		bossState = BossState::MOVE;
 	}
 }
 
-void Boss::Back()
-{
-	//
-
-
-	// look 범위를 벗어나면 제자리로 돌아가도록 ??
-	// 원래 소환진 위로 이동하는 함수?로??
-
-
-}
-
 void Boss::Move() //이동하며 부딪혀서 공격
 {
+	cout << "move" << endl;
+
 	img->visible = true;
 	imgAtt->visible = false;
 
@@ -157,10 +204,10 @@ void Boss::Move() //이동하며 부딪혀서 공격
 	col->MoveWorldPos(moveDir * 60.0f * DELTA);
 
 
-	//move -> idle
+	//move -> back
 	if (distance > (float)BossState::MOVE)
 	{
-		bossState = BossState::IDLE;
+		bossState = BossState::BACK;
 	}
 
 	//씬01에서 fightmod 를 true로 변경하면 attack 모드로 바뀜
@@ -173,6 +220,8 @@ void Boss::Move() //이동하며 부딪혀서 공격
 
 void Boss::Attack() //점프뛰며 공격
 {
+	cout << "attack" << endl;
+
 	img->visible = false;
 	imgAtt->visible = true;
 
@@ -193,6 +242,8 @@ void Boss::Attack() //점프뛰며 공격
 
 void Boss::Die()
 {
+	cout << "die" << endl;
+
 	img->visible = false;
 	img->colOnOff = false;
 
